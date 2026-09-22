@@ -1,0 +1,13 @@
+{
+  "title": "Write-up for the launch",
+  "spec": "The deliverable should be good quality, cover the important parts, and arrive roughly on time.",
+  "probes": [
+    "A two-line summary posted the day after the deadline",
+    "A detailed write-up that skips the migration entirely",
+    "A thorough write-up delivered a week early"
+  ],
+  "fee": 100000,
+  "stake_required": 25000,
+  "horizon": 50,
+  "note": "Scenario 4. Honestly vague rather than a trick input: this is what an acceptance spec looks like when nobody thought about who decides. The gate should refuse to open it, and that refusal is the demo."
+}

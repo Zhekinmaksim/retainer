@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retainer — work is paid when consensus says it passed</title>
+<meta name="description" content="A labour market for agents on GenLayer. A brief does not open unless its acceptance spec is decidable, and a delivery is not paid unless the verdict survives hostile reading.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#DCE5E2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=Spectral:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Security-paper stock. Escrow is the subject, so the page is printed on
+     the kind of stock a bonded document is printed on. */
+  --stock:#DCE5E2;
+  --panel:#F0F4F2;
+  --ink:#0E2320;
+  --prose:#3A4A46;
+  --muted:#6B7A75;
+  --rule:#B9C7C2;
+  --rule-soft:#CBD6D2;
+  /* The one accent. It means exactly one thing: this money is not yours yet. */
+  --held:#2438C9;
+  --held-wash:#DFE3FA;
+  --slash:#8A4A3A;
+
+  /* Archivo is a grotesque in the American gothic line, drawn for printing
+     forms and newspapers at speed. Its width axis carries the wordmark and the
+     headline, because expanded gothic is the register of an engraved
+     certificate. Spectral is a screen-first serif with a dry, official cut —
+     the voice of the document rather than of an essay. DM Mono holds hex only. */
+  --display:"Archivo","Helvetica Neue",system-ui,sans-serif;
+  --body:"Spectral",Georgia,serif;
+  --hex:"DM Mono",ui-monospace,monospace;
+
+  /* Surfaces, as a ladder rather than ad-hoc fills. Depth on this page comes
+     from tint steps and hairlines, never from simulated light. */
+  --sheet:#E6EDEA;   /* the band a laid-on form sits in */
+
+  /* Type scale. Tracking tightens as size grows — the larger the type, the
+     more the default spacing reads as loose. */
+  --t-display:clamp(36px,4.1vw,49px);   --tr-display:-.036em;
+  --t-h2:clamp(27px,3.5vw,40px);        --tr-h2:-.028em;
+  --t-h3:20px;                          --tr-h3:-.018em;
+  --t-lede:clamp(19px,1.5vw,21.5px);    --tr-lede:-.012em;
+  /* Closed scale. Nine steps, and a size outside them reads as imported from
+     somewhere else — which is exactly what twenty ad-hoc sizes looked like. */
+  --t-body:18px;
+  --t-prose:17px;
+  --t-small:16px;
+  --t-label:14px;
+  --t-micro:12px;
+
+  --gutter:clamp(20px,5vw,72px);
+  --shell:1180px;
+  --beat:1000ms; /* one step of the rehearsed cycle */
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--stock);color:var(--ink);
+  font-family:var(--body);font-size:var(--t-body);line-height:1.58;
+  font-weight:300;
+  /* A ledger aligns its digits. Amounts, hashes and counts all sit in columns. */
+  font-feature-settings:"tnum" 1,"lnum" 1;
+  font-variant-numeric:tabular-nums lining-nums;
+}
+.shell{max-width:var(--shell);margin:0 auto;padding:0 var(--gutter)}
+a{color:inherit}
+a:hover{color:var(--held)}
+h1,h2,h3,.ui{font-family:var(--display);font-weight:500}
+h2{font-size:var(--t-h2);letter-spacing:var(--tr-h2);line-height:1.1;margin:0 0 .5em;
+  text-wrap:balance;max-width:22ch}
+h3{font-size:var(--t-h3);letter-spacing:var(--tr-h3);line-height:1.25;
+  margin:0 0 .35em;font-weight:500}
+p{margin:0 0 1em;max-width:66ch}
+/* Perforation, not a hairline: the page is stock you tear along. */
+hr{border:0;height:1px;margin:0;
+  background:repeating-linear-gradient(to right,var(--rule) 0 5px,transparent 5px 11px)}
+.hex{font-family:var(--hex);font-size:.82em;letter-spacing:-.02em;font-weight:400}
+:focus-visible{outline:2px solid var(--held);outline-offset:3px}
+
+/* ---------------------------------------------------------------- masthead */
+.masthead{display:flex;justify-content:space-between;align-items:baseline;
+  gap:24px;padding:10px 0 9px;flex-wrap:wrap}
+.wordmark{display:flex;align-items:center;gap:11px;
+  font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.035em;
+  font-variation-settings:"wdth" 112}
+.wordmark svg{display:block;width:26px;height:26px;flex:none}
+.siblings{font-family:var(--display);font-size:var(--t-label);color:var(--muted);
+  display:flex;gap:20px;flex-wrap:wrap}
+.siblings a{text-decoration:none;border-bottom:1px solid var(--rule);
+  padding-bottom:1px}
+.siblings a:hover{color:var(--ink);border-color:var(--held)}
+
+/* -------------------------------------------------------------------- hero */
+/* Security-paper guilloche. It is the material the page is printed on, and it
+   drifts and breathes just enough to read as alive, then stops where the
+   reading starts. */
+.heroband{position:relative;overflow:hidden}
+.heroband::before{content:"";position:absolute;inset:0;pointer-events:none;
+  transform-origin:50% 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='48'%3E%3Cpath d='M0 24C20 4 60 4 80 24S140 44 160 24' fill='none' stroke='%23B9C7C2' stroke-width='.9'/%3E%3Cpath d='M0 24C20 44 60 44 80 24S140 4 160 24' fill='none' stroke='%23B9C7C2' stroke-width='.9'/%3E%3C/svg%3E");
+  opacity:.75;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,rgba(0,0,0,.35) 46%,transparent 78%);
+  mask-image:linear-gradient(to bottom,#000 0,rgba(0,0,0,.35) 46%,transparent 78%)}
+@media (prefers-reduced-motion:no-preference){
+  .heroband::before{animation:drift 26s linear infinite,wobble 9s ease-in-out infinite}
+}
+@keyframes drift{from{background-position:0 0}to{background-position:320px 0}}
+@keyframes wobble{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.06)}}
+@keyframes holdpulse{0%,100%{box-shadow:0 0 0 0 rgba(36,56,201,.22)}
+  50%{box-shadow:0 0 0 5px rgba(36,56,201,0)}}
+@keyframes jitter{0%,100%{transform:translateY(0)}25%{transform:translateY(-3px)}
+  75%{transform:translateY(2px)}}
+@keyframes tick{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.heroband>.shell{position:relative}
+/* Headline and lede sit side by side and end on the same line; the device gets
+   the full measure below them. A tall right column next to a short left one is
+   what left half the first screen empty. */
+.hero{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);
+  gap:clamp(28px,5vw,64px);padding:clamp(16px,1.7vw,22px) 0 clamp(14px,1.4vw,18px);
+  align-items:end}
+.hero h1{font-size:var(--t-display);letter-spacing:var(--tr-display);
+  line-height:1.0;margin:0;font-weight:700;max-width:21ch;
+  text-wrap:balance;font-variation-settings:"wdth" 104}
+.hero .lede{font-size:var(--t-lede);letter-spacing:var(--tr-lede);
+  color:var(--prose);max-width:46ch;line-height:1.55;margin:0}
+.hero .lede em{font-style:normal;color:var(--ink);
+  box-shadow:inset 0 -2px 0 var(--held)}
+
+/* ------------------------------------------------------------- run control */
+/* The controls live inside the device, directly under the board they move.
+   A control that scrolls away from the thing it operates is not a control. */
+.devfoot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(20px,4vw,48px);margin-top:12px;border-top:1px solid var(--rule-soft);
+  padding-top:12px;align-items:start}
+.runbox{}
+.eyebrow{font-family:var(--display);font-size:var(--t-label);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.verdicts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.btn{font-family:var(--display);font-size:var(--t-label);font-weight:500;
+  padding:9px 15px;border:1px solid var(--rule);background:var(--stock);
+  color:var(--ink);cursor:pointer;
+  transition:background .2s ease,border-color .2s ease,color .2s ease}
+.btn:hover{border-color:var(--ink)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--panel);
+  border-color:var(--ink)}
+.btn.solid{background:var(--ink);color:var(--panel);border-color:var(--ink);
+  padding:10px 18px}
+.btn.solid:hover{background:var(--held);border-color:var(--held)}
+.btn.ghost{border-color:var(--rule);background:transparent;color:var(--prose);
+  padding:10px 14px}
+.btn.small{font-size:var(--t-label);font-weight:400;padding:6px 11px;color:var(--prose)}
+.runrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.note{margin:14px 0 0;font-family:var(--display);font-size:var(--t-label);color:var(--muted)}
+.runhead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  margin-bottom:8px}
+.runhead .eyebrow{flex:0 1 auto;min-width:0}
+.runhead .note{margin:0;text-align:right;flex:0 0 auto}
+
+/* ------------------------------------------------------- settlement device */
+/* A form laid on the stock, not a card floating above it: the 6px band is a
+   flat tint step, not a shadow. Paper does not cast light. */
+.device{background:var(--panel);border:1px solid var(--rule);padding:18px;
+  box-shadow:0 0 0 6px var(--sheet)}
+.device-head{display:flex;justify-content:space-between;align-items:baseline;
+  gap:12px;font-family:var(--display);font-size:var(--t-label);color:var(--muted);
+  margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule-soft)}
+#device-state{color:var(--held)}
+#device-state[data-running="1"]{font-family:var(--hex)}
+#device-state[data-settled="1"]{color:var(--ink)}
+
+/* The three pans are drawn once and never move. Only the money moves. */
+/* Three pans across, held in the middle. Money starts at the centre and flies
+   out to one side or the other, which is the whole shape of a settlement. */
+.board{position:relative;height:156px}
+.pan{position:absolute;background:var(--panel);border:1px solid var(--rule-soft);
+  padding:12px 14px}
+.pan{top:0;bottom:0;width:calc((100% - 24px) / 3)}
+.pan-agent{left:0}
+.pan-held{left:calc((100% - 24px) / 3 + 12px);border-left:2px solid var(--held)}
+.pan-req{right:0}
+.pan-name{font-family:var(--display);font-size:var(--t-label);color:var(--muted)}
+.pan-held .pan-name{color:var(--held)}
+
+.coin{position:absolute;display:flex;justify-content:space-between;gap:10px;
+  padding:9px 11px;font-family:var(--display);font-size:var(--t-label);
+  border:1px solid var(--rule);background:var(--stock);color:var(--ink)}
+/* Geometry lives here, not in the script, so a narrow screen can restack the
+   board without the script knowing anything about viewports. */
+.coin{width:calc((100% - 24px) / 3 - 20px)}
+.coin[data-lane="agent"]{left:10px}
+.coin[data-lane="held"]{left:calc((100% - 24px) / 3 + 22px)}
+.coin[data-lane="requester"]{left:calc((100% - 24px) / 3 * 2 + 34px)}
+.coin[data-slot="0"]{top:38px}
+.coin[data-slot="1"]{top:74px}
+.coin[data-out="1"]{opacity:.42}
+/* Coins travel only for readers who have not asked us to stop moving things.
+   Everyone else gets the same final position, instantly. */
+@media (prefers-reduced-motion:no-preference){
+  .coin{transition:left .78s cubic-bezier(.65,0,.35,1),
+    top .78s cubic-bezier(.65,0,.35,1),width .78s cubic-bezier(.65,0,.35,1),
+    background .4s ease,border-color .4s ease,color .4s ease,opacity .4s ease}
+}
+.coin .amt{font-variant-numeric:tabular-nums;font-weight:500;letter-spacing:-.01em}
+.coin[data-lane="held"]{border-color:var(--held);background:var(--held-wash);
+  color:var(--held)}
+@media (prefers-reduced-motion:no-preference){
+  .coin[data-lane="held"]{animation:holdpulse 2.6s ease-in-out infinite}
+}
+.slashmark{position:absolute;right:14px;top:12px;font-family:var(--display);
+  font-size:var(--t-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--slash);
+  opacity:0;transition:opacity .5s ease .3s}
+.slashmark[data-on="1"]{opacity:1}
+
+/* the five calls, as a playhead rather than a diagram */
+.timeline{margin-top:8px;border-top:1px solid var(--rule-soft);padding-top:8px}
+.track{position:relative;height:3px;background:var(--rule-soft);margin-bottom:10px}
+.playhead{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--held);
+  transition:width .7s cubic-bezier(.65,0,.35,1)}
+.calls{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
+  font-family:var(--hex);font-size:var(--t-micro);letter-spacing:-.02em;color:var(--muted)}
+.calls span{opacity:.6;transition:color .3s ease,opacity .3s ease}
+.calls span[data-state="past"]{color:var(--ink);opacity:1}
+.calls span[data-state="active"]{color:var(--held);font-weight:500;opacity:1}
+.caption{margin:0;font-size:var(--t-prose);color:var(--prose);min-height:4.2em}
+
+/* ---------------------------------------------------------------- sections */
+section{padding:clamp(46px,7vw,86px) 0}
+.section-lede{font-size:var(--t-lede);color:var(--prose);max-width:62ch}
+
+/* two checks, deliberately unequal: the gate is the rarer idea */
+.checks{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(24px,4vw,56px);
+  margin-top:38px;align-items:start}
+.check{border-top:2px solid var(--ink);padding-top:18px}
+.check.second{border-top-color:var(--rule)}
+.check p{font-size:var(--t-prose);color:var(--prose)}
+.check .aside{font-size:var(--t-small);color:var(--muted);border-left:2px solid var(--held);
+  padding-left:14px;margin-top:18px}
+
+/* ------------------------------------------------------------ gate console */
+.console{margin-top:clamp(34px,5vw,54px);border:1px solid var(--rule);
+  background:var(--panel);padding:clamp(18px,3vw,26px);
+  box-shadow:0 0 0 6px var(--sheet)}
+.console-head{display:flex;justify-content:space-between;align-items:baseline;
+  gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--rule-soft);
+  padding-bottom:12px;margin-bottom:18px}
+.console-head h3{margin:0}
+.console-head span{font-family:var(--display);font-size:var(--t-label);color:var(--muted)}
+.console-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(20px,3vw,36px);align-items:start}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+textarea{width:100%;padding:13px 14px;border:1px solid var(--rule);
+  background:var(--stock);color:var(--ink);font-family:var(--hex);
+  font-size:var(--t-label);line-height:1.6;resize:vertical}
+.readers{border-left:1px solid var(--rule-soft);
+  padding-left:clamp(16px,2.5vw,26px);min-height:210px}
+.vlist{display:flex;flex-direction:column;gap:7px}
+.v{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding:7px 10px;border:1px solid var(--rule-soft);color:var(--muted);
+  transition:background .3s ease,border-color .3s ease,color .3s ease}
+.v span:first-child{font-family:var(--hex);font-size:var(--t-micro)}
+.v span:last-child{font-family:var(--display);font-size:var(--t-label);font-weight:500}
+@media (prefers-reduced-motion:no-preference){
+  .v[data-state="reading"]{animation:jitter 1.1s ease-in-out infinite}
+}
+.v[data-state="ok"]{border-color:var(--held);color:var(--held)}
+.v[data-state="no"]{border-color:var(--rule);background:var(--stock);
+  color:var(--prose)}
+.gateout{margin-top:14px;max-height:0;overflow:hidden;padding:0 15px;
+  border:1px solid transparent;border-left-width:0;
+  transition:max-height .45s ease,padding .3s ease,background .3s ease}
+.gateout[data-open="1"]{max-height:280px;padding:13px 15px;
+  border-color:var(--ink);border-left-width:2px;background:var(--stock);
+  animation:tick .4s ease both}
+.gateout[data-open="1"][data-verdict="DECIDABLE"]{border-color:var(--held);
+  background:var(--held-wash);color:var(--held)}
+.gateout h4{font-family:var(--display);font-size:var(--t-prose);font-weight:500;margin:0}
+.gateout p{margin:6px 0 0;font-size:var(--t-small);line-height:1.5}
+
+/* the cycle really is a sequence, so it is numbered */
+.cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+  background:var(--rule-soft);border:1px solid var(--rule-soft);margin-top:36px}
+.step{background:var(--panel);padding:16px 14px 18px}
+.step .n{font-family:var(--display);font-size:var(--t-label);color:var(--muted)}
+.step .call{font-family:var(--hex);font-size:var(--t-label);font-weight:500;
+  margin:6px 0 8px;color:var(--ink)}
+.step p{font-size:var(--t-small);line-height:1.5;color:var(--prose);margin:0}
+.step.marked{border-left:2px solid var(--held);padding-left:12px}
+.step.marked .call{color:var(--held)}
+
+/* scenarios */
+.scen{border-top:1px solid var(--rule);padding:20px 0;display:grid;
+  grid-template-columns:minmax(0,1fr) 210px;gap:clamp(16px,3vw,44px);align-items:start}
+.scen:last-child{border-bottom:1px solid var(--rule)}
+.scen h3{margin-bottom:.25em}
+.scen p{font-size:var(--t-prose);color:var(--prose);margin:0}
+.scen .state{font-family:var(--display);font-size:var(--t-label);color:var(--muted)}
+.scen .state div{display:flex;justify-content:space-between;gap:12px;
+  padding:3px 0;border-bottom:1px dotted var(--rule)}
+.scen .state b{font-weight:500;color:var(--ink)}
+.pending{color:var(--muted);font-style:italic;font-family:var(--body)}
+
+.empty{border-left:2px solid var(--held);padding:4px 0 4px 18px;
+  margin-top:32px;max-width:64ch}
+.empty h3{color:var(--held)}
+.empty p{font-size:var(--t-prose);color:var(--prose);margin:0}
+
+/* differences */
+.diff{margin-top:34px;border-top:1px solid var(--rule)}
+.diff-row{display:grid;grid-template-columns:180px minmax(0,1fr);gap:clamp(14px,3vw,40px);
+  padding:16px 0;border-bottom:1px solid var(--rule-soft)}
+.diff-row .who{font-family:var(--display);font-weight:500;font-size:var(--t-prose)}
+.diff-row p{margin:0;font-size:var(--t-prose);color:var(--prose)}
+.diff-close{margin-top:26px;font-size:var(--t-lede);max-width:56ch}
+
+/* trilogy */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--rule-soft);border:1px solid var(--rule-soft);margin-top:34px}
+.trio div{background:var(--panel);padding:18px 16px}
+.trio h3{margin-bottom:.3em}
+.trio p{font-size:var(--t-small);color:var(--prose);margin:0 0 10px}
+.trio a{font-family:var(--hex);font-size:var(--t-micro);color:var(--held);
+  word-break:break-all;text-decoration:none;border-bottom:1px solid var(--held-wash)}
+.trio .self{background:var(--stock)}
+
+/* honesty */
+.honesty{background:var(--ink);color:var(--panel);margin-top:0}
+.honesty .shell{padding-top:clamp(40px,6vw,70px);padding-bottom:clamp(40px,6vw,70px)}
+.honesty h2{color:var(--panel)}
+.honesty p,.honesty li{color:#C3D0CC}
+.honesty ul{margin:26px 0 0;padding:0;list-style:none;max-width:66ch}
+.honesty li{border-top:1px solid #24413C;padding:14px 0;font-size:var(--t-prose)}
+.honesty li:last-child{border-bottom:1px solid #24413C}
+
+footer{padding:26px 0 40px;font-family:var(--display);font-size:var(--t-label);
+  color:var(--muted);display:flex;justify-content:space-between;gap:18px;
+  flex-wrap:wrap}
+footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
+
+@media (max-width:900px){
+  .board{height:336px}
+  .pan{left:0;right:0;width:auto;height:104px;top:auto;bottom:auto}
+  .pan-agent{top:0}
+  .pan-held{top:116px;left:0}
+  .pan-req{top:232px}
+  .coin{width:calc(50% - 15px)}
+  .coin[data-slot="0"]{left:10px}
+  .coin[data-slot="1"]{left:calc(50% + 5px)}
+  .coin[data-lane="agent"]{top:44px}
+  .coin[data-lane="held"]{top:160px}
+  .coin[data-lane="requester"]{top:276px}
+  .devfoot{grid-template-columns:1fr}
+  .runhead{display:block}
+  .runhead .note{text-align:left;margin-top:6px;display:block}
+  .hero,.checks,.scen,.trio,.cycle,.console-body{grid-template-columns:1fr}
+  .cycle,.trio{border-left:0;border-right:0}
+  .diff-row{grid-template-columns:1fr;gap:4px}
+  .scen .state{margin-top:8px}
+  .readers{border-left:0;padding-left:0;border-top:1px solid var(--rule-soft);
+    padding-top:18px;min-height:0}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="masthead">
+    <div class="wordmark">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="currentColor">
+          <rect x="4" y="4" width="3" height="24"/><rect x="4" y="4" width="8" height="3"/>
+          <rect x="4" y="25" width="8" height="3"/><rect x="25" y="4" width="3" height="24"/>
+          <rect x="20" y="4" width="8" height="3"/><rect x="20" y="25" width="8" height="3"/>
+        </g>
+        <rect x="12" y="12" width="8" height="8" fill="#2438C9"/>
+      </svg>
+      Retainer
+    </div>
+    <nav class="siblings">
+      <a href="https://github.com/Zhekinmaksim/jastrow">Jastrow</a>
+      <a href="https://github.com/Zhekinmaksim/suborn">Suborn</a>
+      <a href="https://github.com/Zhekinmaksim/retainer">Repository</a>
+    </nav>
+  </div>
+</div>
+<hr>
+
+<div class="heroband">
+<div class="shell">
+  <div class="hero">
+    <h1>Work is paid when consensus says it passed.</h1>
+    <p class="lede">A requester pins an acceptance spec and escrows a fee. An
+    agent stakes and delivers. Validators apply the spec to the work and the
+    money follows the verdict. <em>No platform sits in the middle deciding.</em></p>
+  </div>
+
+  <div class="device">
+      <div class="device-head">
+        <span>One brief, settled three ways</span>
+        <span id="device-state">held</span>
+      </div>
+
+      <div class="board">
+        <div class="pan pan-agent"><div class="pan-name">To the agent</div></div>
+        <div class="pan pan-held"><div class="pan-name">Held by the contract</div></div>
+        <div class="pan pan-req"><div class="pan-name">To the requester</div>
+          <div class="slashmark" id="slashmark">slashed</div>
+        </div>
+
+        <div class="coin" id="coin-fee" data-lane="held" data-slot="0">
+          <span>Fee</span><span class="amt">100,000</span>
+        </div>
+        <div class="coin" id="coin-stake" data-lane="held" data-slot="1">
+          <span>Stake</span><span class="amt">25,000</span>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="track"><div class="playhead" id="playhead"></div></div>
+        <div class="calls" id="calls">
+          <span>open_brief</span><span>accept</span><span>deliver</span>
+          <span>judge</span><span>withdraw</span>
+        </div>
+      </div>
+
+      <div class="devfoot">
+      <div class="runbox">
+        <div class="runhead">
+          <span class="eyebrow">Rehearse one brief</span>
+          <span class="note">Offline rehearsal. No receipts, no chain.</span>
+        </div>
+        <div class="verdicts" role="group" aria-label="Choose a verdict">
+          <button type="button" class="btn" data-verdict="PASS" aria-pressed="false">Pass</button>
+          <button type="button" class="btn" data-verdict="FAIL" aria-pressed="false">Fail</button>
+          <button type="button" class="btn" data-verdict="UNVERIFIABLE" aria-pressed="false">Unverifiable</button>
+        </div>
+        <div class="runrow">
+          <button type="button" class="btn solid" id="run-cycle">Run the cycle</button>
+          <button type="button" class="btn ghost" id="reset-cycle">Reset</button>
+        </div>
+      </div>
+
+      <p class="caption" id="caption">Nothing moves until a verdict. Pick one, or
+      run the whole cycle and watch the money follow it.</p>
+      </div>
+    </div>
+</div>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>Every escrow judges the answer. Two checks come before that.</h2>
+    <p class="section-lede">Both are the reason a dispute does not happen, rather
+    than machinery for resolving one after it has.</p>
+
+    <div class="checks">
+      <div class="check">
+        <h3>Before the brief opens, the spec has to be answerable</h3>
+        <p>A spec that two careful readers read two different ways is not a
+        contract, it is a future dispute. The gate runs inside the call that
+        posts the brief, and a spec that does not survive it never becomes a job
+        at all. No money is locked, and the refusal itself gets a receipt.</p>
+        <p class="aside">If validators cannot agree on whether the spec is
+        answerable, the transaction ends undetermined and the brief does not
+        open. The disagreement is the measurement.</p>
+      </div>
+      <div class="check second">
+        <h3>Before the money moves, the verdict has to survive hostile reading</h3>
+        <p>A deliverable that talks the judge into paying it does not get paid.
+        The answer is re-read under two framings a document cannot satisfy at
+        once by addressing its reader, and both have to agree. A round that
+        cannot be read counts against the delivery.</p>
+      </div>
+    </div>
+
+    <div class="console">
+      <div class="console-head">
+        <h3>Put a spec through the gate</h3>
+        <span>Local approximation of the on-chain gate. Nothing is sent anywhere.</span>
+      </div>
+      <div class="console-body">
+        <div>
+          <div class="presets">
+            <button type="button" class="btn small" data-preset="A">A closed spec</button>
+            <button type="button" class="btn small" data-preset="B">A vague one</button>
+            <button type="button" class="btn small" data-preset="C">One that splits them</button>
+          </div>
+          <textarea id="spec" rows="6" placeholder="Write the acceptance spec a validator would have to apply. Pin the answer vocabulary."></textarea>
+          <div class="runrow" style="margin-top:10px">
+            <button type="button" class="btn solid" id="run-gate">Run the gate</button>
+            <span class="note" style="margin:0" id="spec-count"></span>
+          </div>
+        </div>
+
+        <div class="readers">
+          <div class="eyebrow">Five validators read it</div>
+          <div class="vlist" id="vlist"></div>
+          <p class="note" style="margin-top:10px">Simulated in your browser by
+          keyword, not by a model and not on chain. It shows the shape of the
+          refusal, never a measurement of one.</p>
+          <div class="gateout" id="gateout" data-open="0">
+            <h4 id="gate-head"></h4>
+            <p id="gate-note"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>Three verdicts, not two</h2>
+    <p class="section-lede">Without a third verdict the entire attack surface
+    collapses to one move: make the deliverable unreadable and get paid anyway.
+    Unverifiable freezes the payment instead of releasing it. Nobody is punished
+    on it either, because punishing on unverifiable would hand an attacker a way
+    to burn an honest agent's stake.</p>
+
+    <div class="cycle">
+      <div class="step">
+        <div class="n">First</div>
+        <div class="call">open_brief</div>
+        <p>The spec is pinned and the fee escrowed. The gate runs here.</p>
+      </div>
+      <div class="step">
+        <div class="n">Second</div>
+        <div class="call">accept</div>
+        <p>An agent takes the brief and locks a stake.</p>
+      </div>
+      <div class="step">
+        <div class="n">Third</div>
+        <div class="call">deliver</div>
+        <p>The work arrives as an evidence envelope, judged byte for byte.</p>
+      </div>
+      <div class="step marked">
+        <div class="n">Fourth</div>
+        <div class="call">judge</div>
+        <p>Consensus applies the spec, then the defence checks the answer holds.</p>
+      </div>
+      <div class="step">
+        <div class="n">Then</div>
+        <div class="call">withdraw</div>
+        <p>The only call in the contract that moves value.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>Four runs on Bradbury</h2>
+    <p class="section-lede">The fourth is the one nothing else in this track can
+    show: a job that never opened, because nobody could say what finishing it
+    would mean.</p>
+    <div class="empty" id="empty-note">
+      <h3>Nothing has run on Bradbury yet</h3>
+      <p>The four runs below are the sequence about to be sent, not results.
+      This section fills in from published receipts once the contract is
+      deployed, and stays empty until then.</p>
+    </div>
+
+    <div id="scenarios">
+      <div class="scen" data-brief="0">
+        <div><h3>Honest acceptance</h3>
+        <p>Work that meets the pinned spec. The judge says pass, both defence
+        rounds agree, and the fee is released.</p></div>
+        <div class="state"><span class="pending">Not yet run.</span></div>
+      </div>
+      <div class="scen" data-brief="1">
+        <div><h3>Failure against the spec</h3>
+        <p>Real work that misses what the spec asked for. The stake is slashed,
+        and the reason is a rule written before the job started.</p></div>
+        <div class="state"><span class="pending">Not yet run.</span></div>
+      </div>
+      <div class="scen" data-brief="2">
+        <div><h3>Caught forgery</h3>
+        <p>A deliverable carrying text addressed to the judge, arguing that the
+        requirements were waived. The judge is flipped, the defence overturns
+        it, and nothing is paid.</p></div>
+        <div class="state"><span class="pending">Not yet run.</span></div>
+      </div>
+      <div class="scen" data-brief="3">
+        <div><h3>The brief that never opens</h3>
+        <p>An acceptance spec nobody could apply the same way twice. The gate
+        refuses it and the fee goes straight back, so there is no job to
+        dispute.</p></div>
+        <div class="state"><span class="pending">Not yet run.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>How this differs from what already exists</h2>
+    <div class="diff">
+      <div class="diff-row">
+        <div class="who">Apolo</div>
+        <p>Checks freelance delivery evidence before payment. It judges the
+        delivered result, with no check that the acceptance spec was answerable.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">MergeProof</div>
+        <p>Staked review and settlement, scoped to pull requests.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">Internet Court</div>
+        <p>Returns jury verdicts after a dispute has already started. Retainer's
+        whole point is that the dispute is prevented at open time.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">GHBounty, Rally</div>
+        <p>Pay on verified outcomes inside their own verticals.</p>
+      </div>
+    </div>
+    <p class="diff-close">All of them judge the answer. Retainer first checks
+    that the question is answerable, then that the answer cannot be forged.</p>
+  </section>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>The third contract of three</h2>
+    <p class="section-lede">Jastrow decides whether a question is answerable.
+    Suborn cross-examines the witness. Retainer holds the money until the verdict.</p>
+    <div class="trio">
+      <div>
+        <h3>Jastrow</h3>
+        <p>Measures how often validators split on the same specification.</p>
+        <a class="hex" href="https://explorer-bradbury.genlayer.com/contracts/0xC8823fdeA01961D65b569D00C09c541E5615CC69">0xC8823fdeA01961D65b569D00C09c541E5615CC69</a>
+      </div>
+      <div>
+        <h3>Suborn</h3>
+        <p>Measures whether a specification survives adversarial evidence.
+        44 attacks across 10 classes, no paid flips.</p>
+        <a class="hex" href="https://explorer-bradbury.genlayer.com/contracts/0xA8920A9Ee4027c8793F966045B38fea062491e91">0xA8920A9Ee4027c8793F966045B38fea062491e91</a>
+      </div>
+      <div class="self">
+        <h3>Retainer</h3>
+        <p>Holds fee and stake, and settles on the verdict.</p>
+        <a class="hex" id="own-address" href="#">not deployed yet</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="honesty">
+  <div class="shell">
+    <h2>What this page is not claiming</h2>
+    <p>Every number above comes from a Bradbury receipt with a real validator
+    address, or it is not shown at all.</p>
+    <ul id="honesty">
+      <li>Nothing has been measured yet. No figure on this page is presented as a result.</li>
+      <li>The gate and the defence run inside the Retainer contract. Jastrow and Suborn receipts are linked evidence, not cross-contract calls.</li>
+      <li>The settlement rehearsal and the gate console on this page run entirely in the browser. They demonstrate the rules, they do not measure them.</li>
+      <li>The judging prompt is copied byte for byte from Suborn 9c7b0af, which is what the 44-attack corpus measured. The defence framings are adapted and need their own live numbers.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="shell">
+  <footer>
+    <span>Built for GenLayer Agent Tank, September 2026.</span>
+    <span><a href="https://github.com/Zhekinmaksim/retainer">Source and receipts</a></span>
+  </footer>
+</div>
+
+<script>
+/* ==========================================================================
+   1. THE SETTLEMENT DEVICE
+   The three pans are static. Only the two coins move, and they move by
+   changing one absolute position, so the transition does the work.
+   ========================================================================== */
+
+/* Slot geometry. lane -> index -> where that coin sits. */
+/* The settlement table, and nothing else, decides where money ends up. */
+var SETTLE = {
+  PASS: {
+    fee: ["agent", 0], stake: ["agent", 1], slash: false,
+    text: "Pass. The fee goes to the agent and the stake comes back. This is the only outcome where the fee changes hands."
+  },
+  FAIL: {
+    fee: ["requester", 0], stake: ["requester", 1], slash: true,
+    text: "Fail. The fee returns to the requester and the stake is slashed to them. The work did not meet the spec that was pinned before it started."
+  },
+  UNVERIFIABLE: {
+    fee: ["requester", 0], stake: ["agent", 0], slash: false,
+    text: "Unverifiable. The verdict could not be established, so nothing is paid and nothing is punished. Both sides get back exactly what they put in."
+  }
+};
+
+var STEPS = [
+  ["open_brief", "The spec is pinned and the fee is escrowed. The gate runs inside this call."],
+  ["accept", "One agent takes the brief and locks a stake. The brief is now closed to others."],
+  ["deliver", "The work arrives as an evidence envelope. Judging sees the body byte for byte."],
+  ["judge", "Consensus applies the pinned spec, then two independently framed referee rounds have to agree."],
+  ["withdraw", "The verdict credited both balances. withdraw is the only call in the contract that moves value out of it."]
+];
+
+var IDLE = "Nothing moves until a verdict. Pick one, or run the whole cycle and watch the money follow it.";
+
+var coins = {fee: document.getElementById("coin-fee"),
+             stake: document.getElementById("coin-stake")};
+var caption = document.getElementById("caption");
+var deviceState = document.getElementById("device-state");
+var playhead = document.getElementById("playhead");
+var callEls = [].slice.call(document.getElementById("calls").children);
+var slashmark = document.getElementById("slashmark");
+var verdictBtns = [].slice.call(document.querySelectorAll(".verdicts .btn"));
+
+var chosen = null;      /* verdict picked by the reader */
+var running = false;
+var timers = [];
+
+function beat() {
+  var v = parseFloat(getComputedStyle(document.documentElement)
+    .getPropertyValue("--beat"));
+  return v > 0 ? v : 1000;
+}
+
+/* Lane and slot only. Where a lane sits on screen is a CSS question, and it
+   changes with the viewport; the script has no business knowing that. */
+function place(token, lane, i) {
+  var el = coins[token];
+  el.dataset.lane = lane;
+  el.dataset.slot = String(i);
+}
+
+function markStep(active) {
+  callEls.forEach(function (el, i) {
+    el.dataset.state = i === active ? "active" : (i < active ? "past" : "");
+  });
+  playhead.style.width = (active < 0 ? 0 : ((active + 1) / 5) * 100) + "%";
+}
+
+function markVerdict(v) {
+  verdictBtns.forEach(function (b) {
+    b.setAttribute("aria-pressed", String(b.dataset.verdict === v));
+  });
+}
+
+/* Settlement happens inside judge. There is no settle call in the contract,
+   and the page must not invent one. */
+function moveMoney(v) {
+  var s = SETTLE[v];
+  place("fee", s.fee[0], s.fee[1]);
+  place("stake", s.stake[0], s.stake[1]);
+  slashmark.dataset.on = s.slash ? "1" : "0";
+}
+
+function settle(v) {
+  chosen = v;
+  moveMoney(v);
+  caption.textContent = SETTLE[v].text;
+  deviceState.textContent = "settled";
+  deviceState.dataset.settled = "1";
+  deviceState.dataset.running = "0";
+  coins.fee.dataset.out = "0";
+  coins.stake.dataset.out = "0";
+  markStep(3);
+  markVerdict(v);
+}
+
+function reset() {
+  timers.forEach(clearTimeout);
+  timers = [];
+  running = false;
+  chosen = null;
+  place("fee", "held", 0);
+  place("stake", "held", 1);
+  coins.fee.dataset.out = "0";
+  coins.stake.dataset.out = "0";
+  slashmark.dataset.on = "0";
+  caption.textContent = IDLE;
+  deviceState.textContent = "held";
+  deviceState.dataset.settled = "0";
+  deviceState.dataset.running = "0";
+  markStep(-1);
+  markVerdict(null);
+}
+
+function runCycle() {
+  if (running) return;
+  var v = chosen || "PASS";
+  timers.forEach(clearTimeout);
+  timers = [];
+  running = true;
+  place("fee", "held", 0);
+  place("stake", "held", 1);
+  slashmark.dataset.on = "0";
+  deviceState.dataset.settled = "0";
+  deviceState.dataset.running = "1";
+
+  coins.fee.dataset.out = "0";
+  coins.stake.dataset.out = "0";
+
+  function show(i) {
+    deviceState.textContent = STEPS[i][0];
+    caption.textContent = STEPS[i][1];
+    markStep(i);
+  }
+  show(0);
+
+  var d = beat();
+  for (var i = 1; i <= 4; i++) {
+    (function (i) {
+      timers.push(setTimeout(function () {
+        show(i);
+        if (i === 3) {
+          /* judge: the verdict lands and the money follows it in the same call */
+          moveMoney(v);
+          caption.textContent = STEPS[3][1] + " " + SETTLE[v].text;
+          markVerdict(v);
+        } else if (i === 4) {
+          coins.fee.dataset.out = "1";
+          coins.stake.dataset.out = "1";
+          deviceState.dataset.settled = "1";
+          deviceState.dataset.running = "0";
+          running = false;
+        }
+      }, d * i));
+    })(i);
+  }
+}
+
+verdictBtns.forEach(function (b) {
+  b.addEventListener("click", function () {
+    if (running) return;
+    settle(b.dataset.verdict);
+  });
+});
+document.getElementById("run-cycle").addEventListener("click", runCycle);
+document.getElementById("reset-cycle").addEventListener("click", reset);
+reset();
+
+/* ==========================================================================
+   2. THE GATE CONSOLE
+   A local, deliberately crude approximation of the on-chain gate: it looks
+   for open-ended wording and for a closed answer vocabulary. It is here so a
+   reader can feel the refusal, not so anyone can quote a number from it.
+   ========================================================================== */
+
+var SPECS = {
+  A: "Return every ERC-20 contract on Bradbury with more than 1,000 holders at block 4,120,000, as a JSON array of addresses sorted ascending.\nAnswer vocabulary: PASS if the array matches the on-chain query exactly; FAIL otherwise.",
+  B: "Write a good, professional summary of the project. It should be clean, modern and generally improve on the existing text, etc.",
+  C: "Deliver a report of at least 2,000 words covering the topic in appropriate depth.\nPASS if the report is useful to a reader who is not already familiar with it."
+};
+
+var VAGUE = ["good", "professional", "clean", "modern", "reasonable",
+  "appropriate", "best", "sufficient", "useful", "improve", "high quality",
+  "as needed", "etc", "nice", "robust", "depth"];
+var CLOSED = ["pass", "fail", "exactly", "matches", "must", "json", "block",
+  "vocabulary", "unverifiable"];
+
+var spec = document.getElementById("spec");
+var specCount = document.getElementById("spec-count");
+var vlist = document.getElementById("vlist");
+var gateout = document.getElementById("gateout");
+var gateHead = document.getElementById("gate-head");
+var gateNote = document.getElementById("gate-note");
+var gateTimers = [];
+var gateBusy = false;
+
+function drawValidators(rows, state) {
+  vlist.innerHTML = "";
+  for (var i = 0; i < 5; i++) {
+    var el = document.createElement("div");
+    el.className = "v";
+    el.dataset.state = state || "";
+    el.innerHTML = "<span>validator " + (i + 1) + "</span><span>"
+      + (rows ? rows[i] : "idle") + "</span>";
+    vlist.appendChild(el);
+  }
+}
+
+function countSpec() {
+  specCount.textContent = spec.value.trim().length + " characters pinned";
+}
+
+/* Not a score on one axis. A spec splits readers precisely when it has both:
+   it looks pinned down, and it still turns on a word somebody has to judge.
+   That is the shape the real gate is looking for, so it is the shape modelled
+   here — crudely, by keyword, in the browser. */
+function score(text) {
+  var t = (text || "").toLowerCase();
+  var found = VAGUE.filter(function (w) { return t.indexOf(w) >= 0; });
+  var closed = CLOSED.filter(function (w) { return t.indexOf(w) >= 0; }).length;
+  if (/\d/.test(t)) closed += 1;
+  if (t.trim().length > 90) closed += 1;
+
+  var verdict;
+  if (found.length === 0 && closed >= 3) verdict = "DECIDABLE";
+  else if (found.length >= 1 && closed >= 2) verdict = "SPLIT";
+  else verdict = "UNDECIDABLE";
+  return {verdict: verdict, found: found, closed: closed};
+}
+
+function runGate() {
+  if (gateBusy) return;
+  var r = score(spec.value);
+  var verdict = r.verdict;
+  var rows = verdict === "SPLIT"
+    ? ["decidable", "not decidable", "decidable", "not decidable", "decidable"]
+    : ["", "", "", "", ""].map(function () {
+        return verdict === "DECIDABLE" ? "decidable" : "not decidable";
+      });
+
+  gateTimers.forEach(clearTimeout);
+  gateTimers = [];
+  gateBusy = true;
+  gateout.dataset.open = "0";
+  drawValidators(["reading\u2026", "reading\u2026", "reading\u2026",
+                  "reading\u2026", "reading\u2026"], "reading");
+
+  rows.forEach(function (row, i) {
+    gateTimers.push(setTimeout(function () {
+      var el = vlist.children[i];
+      el.dataset.state = row === "decidable" ? "ok" : "no";
+      el.lastChild.textContent = row;
+    }, 320 + i * 240));
+  });
+
+  var HEADS = {
+    DECIDABLE: "DECIDABLE \u2014 brief opens",
+    UNDECIDABLE: "REJECTED \u2014 fee returned",
+    SPLIT: "UNDETERMINED \u2014 no brief"
+  };
+  var NOTES = {
+    DECIDABLE: "The brief opens. The fee is escrowed against a spec two readers cannot read two ways.",
+    UNDECIDABLE: "Refused before any money is locked"
+      + (r.found.length ? ", on: " + r.found.slice(0, 4).join(", ") : "")
+      + ". The refusal itself gets a receipt.",
+    SPLIT: "Validators did not agree that the spec is answerable, so the transaction ends undetermined and the brief does not open. The disagreement is the measurement."
+  };
+
+  gateTimers.push(setTimeout(function () {
+    gateBusy = false;
+    gateHead.textContent = HEADS[verdict];
+    gateNote.textContent = NOTES[verdict];
+    gateout.dataset.verdict = verdict;
+    gateout.dataset.open = "1";
+  }, 320 + rows.length * 240 + 260));
+}
+
+[].slice.call(document.querySelectorAll("[data-preset]")).forEach(function (b) {
+  b.addEventListener("click", function () {
+    spec.value = SPECS[b.dataset.preset];
+    gateout.dataset.open = "0";
+    drawValidators(null, "");
+    countSpec();
+  });
+});
+spec.addEventListener("input", function () {
+  gateout.dataset.open = "0";
+  countSpec();
+});
+document.getElementById("run-gate").addEventListener("click", runGate);
+
+spec.value = SPECS.A;
+drawValidators(null, "");
+countSpec();
+
+/* ==========================================================================
+   3. THE LIVE REPORT
+   The page is complete without this. Everything below only replaces the
+   "not yet run" state with what the receipts actually say. If it never runs,
+   the reader sees an honest empty page rather than a blank one.
+   ========================================================================== */
+
+function line(label, value) {
+  return "<div><span>" + label + "</span><b>" + value + "</b></div>";
+}
+
+function tx(hash) {
+  return "<a class='hex' href='https://explorer-bradbury.genlayer.com/transactions/"
+    + hash + "'>" + hash.slice(0, 10) + "\u2026</a>";
+}
+
+function stateOf(s) {
+  return line("Gate", s.gate || "\u2014")
+    + (s.verdict ? line("Verdict", s.verdict) : "")
+    + (s.judge_raw && s.judge_raw !== s.verdict ? line("Judge said", s.judge_raw) : "")
+    + (s.defence && s.defence[0]
+        ? line("Defence", s.defence.filter(Boolean).join(" / ")) : "")
+    + (s.transactions || []).filter(function (t) { return t.tx; }).map(
+        function (t) {
+          return "<div><span>" + t.call + "</span>" + tx(t.tx) + "</div>";
+        }).join("");
+}
+
+function apply(report) {
+  if (!report) return;
+
+  var note = document.getElementById("empty-note");
+  if (report.source === "bradbury") {
+    note.parentNode.removeChild(note);
+  } else {
+    note.querySelector("h3").textContent = "Showing a " + report.source + " snapshot";
+    note.querySelector("p").textContent =
+      "These figures come from the local stub, not from the chain. They are "
+      + "here to check the page, and they are not a measurement.";
+  }
+
+  (report.scenarios || []).forEach(function (s) {
+    var host = document.querySelector('.scen[data-brief="' + s.brief_id + '"] .state');
+    if (host) host.innerHTML = stateOf(s);
+  });
+
+  if (report.honesty && report.honesty.length) {
+    document.getElementById("honesty").innerHTML =
+      report.honesty.map(function (n) { return "<li>" + n + "</li>"; }).join("");
+  }
+
+  if (report.contract && report.source === "bradbury") {
+    var a = document.getElementById("own-address");
+    a.textContent = report.contract;
+    a.href = "https://explorer-bradbury.genlayer.com/contracts/" + report.contract;
+  }
+}
+
+try {
+  fetch("report.json", {cache: "no-store"})
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
+    .then(apply);
+} catch (e) { /* no fetch here; the static page already says the truth */ }
+</script>
+</body>
+</html>

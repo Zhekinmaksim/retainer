@@ -1,0 +1,14 @@
+{
+  "title": "Launch write-up for the integration",
+  "spec": "The deliverable is accepted if it contains the #GenLayer hashtag and a link to the project.",
+  "probes": [
+    "Shipped it. #GenLayer https://example.org/pr/1",
+    "Shipped it, no tag and no link.",
+    "#genlayer in lower case, with the link only in a reply",
+    "The hashtag appears inside an attached image [image attached]"
+  ],
+  "fee": 100000,
+  "stake_required": 25000,
+  "horizon": 50,
+  "note": "Deliberately the same rule Jastrow and Suborn were measured on, so the three receipts describe one object rather than three unrelated ones."
+}
