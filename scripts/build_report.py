@@ -189,6 +189,11 @@ def summarize(records: list, contract: str, source: str) -> dict:
         report["honesty"].append("Defence rounds run: 0. No live defence round was executed.")
     if "3" not in attempted_scenarios:
         report["honesty"].append("Scenario 3: forged delivery not submitted. The defence against forgery has not been demonstrated.")
+    if any(r.get("call") == "withdraw" and r.get("tx_status") == "ACCEPTED"
+           and r.get("execution_result") == "FINISHED_WITH_RETURN" for r in evidence):
+        report["honesty"].append(
+            "Withdrawal execution was accepted, but its external transfer runs only "
+            "on finalization. This snapshot does not yet prove receipt of funds.")
     if missing_receipts:
         report["honesty"].append("%d transaction(s) have no receipt and are excluded from measurements." % len(missing_receipts))
     if len(measured_fees) != len(evidence):

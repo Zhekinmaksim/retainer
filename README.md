@@ -23,7 +23,25 @@ witness. Retainer holds the money until the verdict.
 |---|---|---|
 | [Jastrow](https://github.com/Zhekinmaksim/jastrow) | [`0xC8823fdeA01961D65b569D00C09c541E5615CC69`](https://explorer-bradbury.genlayer.com/contracts/0xC8823fdeA01961D65b569D00C09c541E5615CC69) | measures whether validators split on the same spec |
 | [Suborn](https://github.com/Zhekinmaksim/suborn) | [`0xA8920A9Ee4027c8793F966045B38fea062491e91`](https://explorer-bradbury.genlayer.com/contracts/0xA8920A9Ee4027c8793F966045B38fea062491e91) | measures whether a spec survives adversarial evidence |
-| Retainer | [`0xc084Ef884a71B955046f6D278ee1A409DF37b8BC`](https://explorer-bradbury.genlayer.com/contracts/0xc084Ef884a71B955046f6D278ee1A409DF37b8BC) | holds fee and stake, settles on the verdict |
+| Retainer | [`0xe53c01FF26a6787Af29499668e80502195A3447B`](https://explorer-bradbury.genlayer.com/contracts/0xe53c01FF26a6787Af29499668e80502195A3447B) | holds fee and stake, settles on the verdict |
+
+## Live result — 22 September 2026
+
+The reference brief did **not** open: its embedded gate transaction ended
+[`UNDETERMINED`](https://explorer-bradbury.genlayer.com/transactions/0x167de357f5bd008c4d5371222f3c22da20b201f9f0f6c1c597b78fdcc70ee323).
+There is no accepted gate verdict for this brief. The agent ran with `--settle`
+and found no work to accept. Honest payment, spec-failure settlement and forged
+delivery therefore remain untested on this specification.
+
+The deliberately vague brief returned **AMBIGUOUS / REJECTED**
+([receipt](https://explorer-bradbury.genlayer.com/transactions/0xe732478306e829a59e01f5aee6fefb9566ac0ae88526f77c15f4b1aa1b852530)).
+The agent read it and declined: `not open (REJECTED)`.
+**Zero live defence rounds ran. The forgery defence has not been demonstrated.**
+
+[Full run notes](runs/README.md), [receipt-backed report](web/report.json),
+[submission manifest](runs/bradbury.jsonl), and [raw receipts](runs/receipts/)
+include failures as well as successful calls. Earlier deployment defects are
+retained separately; they are not silently replaced by the latest run.
 
 ## How it differs from what already exists in this track
 

@@ -1,0 +1,5 @@
+scanning 1 brief(s)
+  brief 0  skip   not open (REJECTED)
+
+took 0, skipped 1
+  brief 0 skipped: not open (REJECTED)

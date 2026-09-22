@@ -145,7 +145,8 @@ A transaction status of `ACCEPTED` alone does not establish successful
 execution. Check `execution_result == FINISHED_WITH_RETURN` before issuing a
 dependent write. The agent now waits after saving each manifest entry.
 External value transfers execute on finalization; an accepted withdrawal
-is not yet proof that the recipient received funds.
+is not yet proof that the recipient received funds. See the official
+[value-transfer documentation](https://docs.genlayer.com/developers/intelligent-contracts/features/value-transfers).
 
 Prior deployments and failed transactions remain under `runs/initial-sdk-error/`
 and `runs/withdraw-sdk-error/`. The current deployment is recorded in

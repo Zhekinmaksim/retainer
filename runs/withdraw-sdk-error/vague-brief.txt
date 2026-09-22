@@ -1,0 +1,30 @@
+
+Result:
+{
+  accepted_at: 0,
+  agent: '0x0000000000000000000000000000000000000000',
+  brief_id: 0,
+  defence_a: 'PENDING',
+  defence_b: 'PENDING',
+  envelope_hash: '',
+  fee: 100000,
+  fetched_from: '',
+  gate: 'AMBIGUOUS',
+  horizon: 50,
+  judge_raw: '',
+  opened_at: 1,
+  probes: [
+    'A two-line summary posted the day after the deadline',
+    'A detailed write-up that skips the migration entirely',
+    'A thorough write-up delivered a week early'
+  ],
+  requester: '0x771388495F34d21C5574FeFc04cd1D5811E00aDa',
+  spec: 'The deliverable should be good quality, cover the important parts, and arrive roughly on time.',
+  spec_hash: 'f6536847c3bd8b4f10b4f2637f1808eda37d9d101b9d175b564a44adaf35b385',
+  stake_locked: 0,
+  stake_required: 25000,
+  status: 'REJECTED',
+  title: 'Write-up for the launch',
+  verdict: ''
+}
+

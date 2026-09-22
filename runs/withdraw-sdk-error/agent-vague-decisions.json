@@ -1,0 +1,12 @@
+[
+  {
+    "brief_id": 0,
+    "take": false,
+    "reason": "not open (REJECTED)",
+    "dry": true,
+    "gate": "AMBIGUOUS",
+    "status": "REJECTED",
+    "worker": null,
+    "body": null
+  }
+]

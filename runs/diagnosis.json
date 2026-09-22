@@ -1,0 +1,11 @@
+[
+ {
+  "tx": "0x167de357f5bd008c4d5371222f3c22da20b201f9f0f6c1c597b78fdcc70ee323",
+  "file": "",
+  "envelope_hash": "",
+  "status": "UNDETERMINED",
+  "verdict": "UNRESOLVED - receipt says UNDETERMINED, and no brief state was read to compare against",
+  "recovered_as": null,
+  "recovered_record": null
+ }
+]

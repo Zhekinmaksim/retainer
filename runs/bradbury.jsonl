@@ -1,0 +1,3 @@
+{"call": "open_brief", "brief_id": 0, "scenario": 1, "spec_hash": "746f486e861b612ffe06a2118f8becd0d44b202052148ea83c2e8248d5fefd6e", "tx": "0x167de357f5bd008c4d5371222f3c22da20b201f9f0f6c1c597b78fdcc70ee323"}
+{"call": "open_brief", "brief_id": 0, "scenario": 4, "spec_hash": "f6536847c3bd8b4f10b4f2637f1808eda37d9d101b9d175b564a44adaf35b385", "tx": "0xe732478306e829a59e01f5aee6fefb9566ac0ae88526f77c15f4b1aa1b852530"}
+{"call": "withdraw", "brief_id": 0, "scenario": 4, "tx": "0xfb572cc986ebc86858bbb727bd7b7445cc9e7765277a7a0070dc971757bc93be"}

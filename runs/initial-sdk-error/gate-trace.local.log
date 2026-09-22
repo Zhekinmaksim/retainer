@@ -1,0 +1,88 @@
+- Fetching execution trace for 0x226bce6984828a5f01c7ba287664eae6140cd16b66bbe78ff4b52cd09498e25a (round: 0)...
+
+Result:
+{
+  transaction_id: '0x226bce6984828a5f01c7ba287664eae6140cd16b66bbe78ff4b52cd09498e25a',
+  result_code: 2,
+  return_data: '0x2e04646174615c657869745f636f64652031066576656e7473050b66696e6765727072696e7416066672616d657315160466756e63e1070b6d6f64756c655f6e616d653c63707974686f6e160466756e63b9070b6d6f64756c655f6e616d653c63707974686f6e106d6f64756c655f696e7374616e636573160763707974686f6e0e086d656d6f726965730d83021dcdca9702be9378edd5595276eeed74037e184519277504fc7cd454916bcaae09736f6674666c6f61740e086d656d6f726965730d8302fc9e4fa3448da50dc6ff514aba0568ba045276f58d3c60fdf4c5c3d28b16acc8046b696e643c566d4572726f720f73746f726167655f6368616e6765730d15a302372d46c3ada9f897c74d349bbfe0e450c798167c9f580f8daf85def57e96c3ea0000000083020000000000000000000000000000000000000000000000000000000001000000',
+  stdout: '',
+  stderr: 'Traceback (most recent call last):\n' +
+    '  File "/py/libs/_genlayer_runner.py", line 180, in <module>\n' +
+    '    _handle_main()\n' +
+    '    ~~~~~~~~~~~~^^\n' +
+    '  File "/py/libs/_genlayer_runner.py", line 170, in _handle_main\n' +
+    '    _give_result(\n' +
+    '    ~~~~~~~~~~~~^\n' +
+    "    \tlambda: meth2call(contract_instance, *cd.get('args', []), **cd.get('kwargs', {}))\n" +
+    '     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+    '    )\n' +
+    '    ^\n' +
+    '  File "/py/libs/_genlayer_runner.py", line 65, in _give_result\n' +
+    '    res = res_fn()\n' +
+    '  File "/py/libs/_genlayer_runner.py", line 171, in <lambda>\n' +
+    "    lambda: meth2call(contract_instance, *cd.get('args', []), **cd.get('kwargs', {}))\n" +
+    '            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+    '  File "/contract.py", line 139, in open_brief\n' +
+    "    self.briefs.append(Brief(requester=gl.message.sender_address, agent=Address.ZERO, title=title, spec=spec, spec_hash=spec_hash, probes_json=json.dumps(probes, separators=(',', ':'), ensure_ascii=False), gate=gate, fee=u256(fee), stake_required=u256(stake_required), stake_locked=u256(0), status=OPEN if gate == DECIDABLE else REJECTED, verdict='', judge_raw='', defence_a=PENDING, defence_b=PENDING, envelope_hash='', body='', fetched_from='', opened_at=u32(int(self.seq)), accepted_at=u32(0), horizon=u32(horizon)))\n" +
+    '                                                                        ^^^^^^^^^^^^\n' +
+    "AttributeError: type object 'Address' has no attribute 'ZERO'\n",
+  genvm_log: [
+    {
+      file: 'common/src/lib.rs:111',
+      level: 'info',
+      message: 'logging initialized',
+      target: 'genvm_common',
+      ts: '1790060496723',
+      version: 'v0.2.11-x86_64-linux-release'
+    },
+    {
+      file: 'src/exe/run.rs:150',
+      genvm_id: '4965491',
+      level: 'info',
+      message: 'genvm id',
+      target: 'genvm::exe::run',
+      ts: '1790060496724'
+    },
+    {
+      default: 'v0.1.0',
+      file: 'src/runners/parse.rs:88',
+      level: 'warn',
+      message: 'runner comment does not start with version, using default',
+      target: 'genvm::runners::parse',
+      ts: '1790060496727'
+    },
+    {
+      file: 'src/lib.rs:299',
+      level: 'info',
+      message: 'metrics',
+      metrics: {
+        gvm: {
+          host: { time: 1289 },
+          llm_module: { calls: 0, time: 0 },
+          supervisor: {
+            compilation_time: 0,
+            compiled_modules: 0,
+            precompile_hits: 2
+          },
+          web_module: { calls: 0, time: 0 }
+        },
+        llm: null,
+        web: null
+      },
+      target: 'genvm',
+      ts: '1790060496945'
+    },
+    {
+      file: 'src/exe/run.rs:111',
+      level: 'warn',
+      message: 'sigterm received',
+      target: 'genvm::exe::run',
+      ts: '1790060496946'
+    }
+  ],
+  storage_proof: '0xb71383e697a4219b05d548cede241b563e5ee836b7392830633c63d48d6cd4f9',
+  run_time: '0s',
+  eq_outputs: []
+}
+
+✔ Execution trace retrieved

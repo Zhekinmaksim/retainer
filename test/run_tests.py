@@ -696,7 +696,7 @@ check("the page ships no hard-coded verdict counts",
 check("the page states the evidential link, not a cross-contract one",
       "linked evidence, not cross-contract calls" in _page)
 check("the page has an empty state rather than placeholder numbers",
-      "Nothing has run on Bradbury yet" in _page)
+      "Live report not loaded" in _page)
 check("the page refuses to present a stub snapshot as a measurement",
       "not a measurement" in _page)
 check("motion is only user-triggered", "prefers-reduced-motion" in _page)
@@ -711,7 +711,7 @@ check("every scenario has a static not-yet-run state",
       _page.count("Not yet run.") == 4, str(_page.count("Not yet run.")))
 check("the disclaimers render without JavaScript",
       _page.index("<ul id=\"honesty\">") < _page.index("<script>")
-      and "<li>Nothing has been measured yet" in _page)
+      and "<li>Live outcomes require the published report" in _page)
 check("JavaScript only upgrades what is already on the page",
       "if (!report) return;" in _page)
 check("no verdict is stated in the static markup",

@@ -1,0 +1,6 @@
+{
+  "network": "bradbury",
+  "source": "contracts/retainer.deploy.py",
+  "tx": "0x7383e5afac18997989186b163dbe8ba8ea77e3be3b1722f77a76be9d426f3b41",
+  "contract": "0x2B0AF1152eb297316382cD46E4710b142EE08809"
+}

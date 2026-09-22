@@ -1,0 +1,20 @@
+1 transactions to explain
+
+scanning brief ids 0..0 through `genlayer call`
+  0 briefs readable on chain
+
+  Nothing was read. Every verdict below is therefore UNRESOLVED,
+  not evidence that the briefs are absent.
+
+0xaee9ce27fb04  
+   receipt status : UNDETERMINED
+   -> UNRESOLVED - receipt says UNDETERMINED, and no brief state was read to compare against
+
+========================================================================
+0 recoverable, 1 unresolved, 0 explained
+
+Unresolved is not an answer. Do not write 'rejected by the contract'
+in the submission on the strength of it - say six transactions have no
+submission state and the cause was not established.
+
+written: runs/diagnosis.json
