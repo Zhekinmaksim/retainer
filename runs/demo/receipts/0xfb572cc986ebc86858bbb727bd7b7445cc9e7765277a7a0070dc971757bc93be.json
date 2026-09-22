@@ -5,10 +5,10 @@
   "from_address_type": "ACCOUNT",
   "to_address": "0xe53c01FF26a6787Af29499668e80502195A3447B",
   "to_address_type": "CONTRACT",
-  "status": "accepted",
+  "status": "finalized",
   "submission_timestamp": 1790061580,
   "activation_timestamp": 1790061581,
-  "finalization_timestamp": 0,
+  "finalization_timestamp": 1790063399,
   "value": "0",
   "fee": "173053950",
   "leader_timeout": "0",
@@ -49,7 +49,7 @@
   "activator": "0x3f5cAED686336ED9cF3Dede61154B0Cd67Fb9bD7",
   "queue": {
     "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
-    "current_queue_type": "accepted",
+    "current_queue_type": "finalized",
     "pending_slot": 3,
     "current_slot": null,
     "pending_queue_count": 0,
@@ -66,7 +66,7 @@
     "selected_activator": "0x3f5cAED686336ED9cF3Dede61154B0Cd67Fb9bD7"
   },
   "created_at": 1790061582,
-  "updated_at": 1790061598,
+  "updated_at": 1790063406,
   "execution_result": "FINISHED_WITH_RETURN",
   "epoch": 161,
   "enrichment_data": {
@@ -134,7 +134,7 @@
       "epoch": 161,
       "result": "majority_agree",
       "sender": "0x771388495F34d21C5574FeFc04cd1D5811E00aDa",
-      "status": "accepted",
+      "status": "finalized",
       "tx_slot": 3,
       "calldata": "0xd3910e066d6574686f6444776974686472617700",
       "activator": "0x3f5cAED686336ED9cF3Dede61154B0Cd67Fb9bD7",
@@ -163,15 +163,15 @@
   "enrichment_status": "enriched",
   "virtual_state": {
     "source": "consensus_data",
-    "materialized_status": "accepted",
-    "computed_status": "accepted",
+    "materialized_status": "finalized",
+    "computed_status": "finalized",
     "status_changed": false,
     "can_finalize": false,
-    "current_timestamp": 1790063150,
-    "finalization_ready_at": 1790063394,
+    "current_timestamp": 1790063726,
+    "finalization_ready_at": null,
     "finalization_elapsed_seconds": null,
-    "action_hint": "wait_for_finalization_window",
-    "transition_reason": "finalization_wait",
+    "action_hint": null,
+    "transition_reason": null,
     "idleness_stage": null,
     "expected_actor_role": null,
     "needs_materialization": false
@@ -184,7 +184,7 @@
   "validator_appeal_number": null,
   "validator_majority_alignment": null,
   "validator_proposal_outcome": null,
-  "chain_l2_tx_count": 14,
-  "chain_total_gas_used": "7615905",
-  "chain_total_cost": "924525210704150"
+  "chain_l2_tx_count": 15,
+  "chain_total_gas_used": "8202770",
+  "chain_total_cost": "994910512360150"
 }

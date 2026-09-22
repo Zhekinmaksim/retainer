@@ -1,0 +1,8 @@
+scanning 2 brief(s)
+  brief 0  skip   not open (REJECTED)
+  brief 1  take   worker campaign-post, fee 100000 against stake 25000
+    delivered, envelope f6b364ddd44dee9f
+    settled, transaction 0x65a733b024141aa11af604e8bc7a890ec63fe2319038271fafef46e26ae21d54
+
+took 1, skipped 1
+  brief 0 skipped: not open (REJECTED)

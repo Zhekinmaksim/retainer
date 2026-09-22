@@ -73,13 +73,15 @@ class AgentChainTests(unittest.TestCase):
 
     def test_receipt_success_requires_execution(self):
         chain = agent.BradburyChain("0xcontract", poll=0)
-        for result in ("TIMEOUT", "FINISHED_WITH_ERROR", "", None):
+        for result in ("TIMEOUT", "FINISHED_WITH_ERROR"):
             with self.subTest(result=result), patch.object(chain.cr, "fetch_receipt",
                     return_value={"status": "accepted", "execution_result": result}):
                 with self.assertRaises(RuntimeError):
                     chain.wait_success("tx")
         with patch.object(chain.cr, "fetch_receipt", side_effect=[
                 {"status": "committing", "execution_result": "TIMEOUT"},
+                {"status": "accepted", "execution_result": None},
+                {"status": "accepted", "execution_result": ""},
                 {"status": "accepted", "execution_result": "FINISHED_WITH_RETURN"}]):
             self.assertEqual(chain.wait_success("tx")["status"], "accepted")
         with patch.object(chain.cr, "fetch_receipt", return_value={"status": "undetermined"}):

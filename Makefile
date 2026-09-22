@@ -1,6 +1,6 @@
 PY ?= python3
 
-.PHONY: check lint dry agent report serve clean
+.PHONY: check lint dry agent report demo-report serve clean
 
 check: lint
 	$(PY) test/run_tests.py
@@ -25,6 +25,11 @@ agent:
 report:
 	$(PY) scripts/collect_receipts.py runs/bradbury.jsonl --address $(CONTRACT) --out runs/records.jsonl
 	$(PY) scripts/build_report.py --records runs/records.jsonl --contract $(CONTRACT) --out web/report.json
+
+# The explicit-criteria demo is a separate experiment from web/report.json.
+demo-report:
+	$(PY) scripts/collect_receipts.py runs/demo/bradbury.jsonl --address $(CONTRACT) --examples runs/demo/envelopes --receipts-dir runs/demo/receipts --out runs/demo/records.jsonl
+	$(PY) scripts/build_report.py --records runs/demo/records.jsonl --contract $(CONTRACT) --out web/demo-report.json
 
 serve:
 	@echo "http://localhost:8080"

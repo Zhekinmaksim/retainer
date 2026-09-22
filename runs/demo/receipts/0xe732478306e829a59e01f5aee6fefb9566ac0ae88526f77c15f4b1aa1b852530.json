@@ -5,10 +5,10 @@
   "from_address_type": "ACCOUNT",
   "to_address": "0xe53c01FF26a6787Af29499668e80502195A3447B",
   "to_address_type": "CONTRACT",
-  "status": "accepted",
+  "status": "finalized",
   "submission_timestamp": 1790061503,
   "activation_timestamp": 1790061503,
-  "finalization_timestamp": 0,
+  "finalization_timestamp": 1790063322,
   "value": "100000",
   "fee": "173053950",
   "leader_timeout": "0",
@@ -49,7 +49,7 @@
   "activator": "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499",
   "queue": {
     "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
-    "current_queue_type": "accepted",
+    "current_queue_type": "finalized",
     "pending_slot": 2,
     "current_slot": null,
     "pending_queue_count": 0,
@@ -66,7 +66,7 @@
     "selected_activator": "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499"
   },
   "created_at": 1790061506,
-  "updated_at": 1790061527,
+  "updated_at": 1790063325,
   "execution_result": null,
   "epoch": 161,
   "enrichment_data": {
@@ -125,7 +125,7 @@
       "epoch": 161,
       "result": "majority_agree",
       "sender": "0x771388495F34d21C5574FeFc04cd1D5811E00aDa",
-      "status": "accepted",
+      "status": "finalized",
       "tx_slot": 2,
       "calldata": "0xf9017cb9017816046172677335bc0157726974652d757020666f7220746865206c61756e6368f4055468652064656c6976657261626c652073686f756c6420626520676f6f64207175616c6974792c20636f7665722074686520696d706f7274616e742070617274732c20616e642061727269766520726f7567686c79206f6e2074696d652e840466363533363834376333626438623466313062346632363337663138303865646133376439643130316239643137356235363461343461646166333562333835ec095b22412074776f2d6c696e652073756d6d61727920706f7374656420746865206461792061667465722074686520646561646c696e65222c22412064657461696c65642077726974652d7570207468617420736b69707320746865206d6967726174696f6e20656e746972656c79222c22412074686f726f7567682077726974652d75702064656c6976657265642061207765656b206561726c79225dc19a0c9103066d6574686f64546f70656e5f627269656600",
       "activator": "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499",
@@ -158,15 +158,15 @@
   "enrichment_status": "enriched",
   "virtual_state": {
     "source": "consensus_data",
-    "materialized_status": "accepted",
-    "computed_status": "accepted",
+    "materialized_status": "finalized",
+    "computed_status": "finalized",
     "status_changed": false,
     "can_finalize": false,
-    "current_timestamp": 1790063148,
-    "finalization_ready_at": 1790063316,
+    "current_timestamp": 1790063725,
+    "finalization_ready_at": null,
     "finalization_elapsed_seconds": null,
-    "action_hint": "wait_for_finalization_window",
-    "transition_reason": "finalization_wait",
+    "action_hint": null,
+    "transition_reason": null,
     "idleness_stage": null,
     "expected_actor_role": null,
     "needs_materialization": false
@@ -179,7 +179,7 @@
   "validator_appeal_number": null,
   "validator_majority_alignment": null,
   "validator_proposal_outcome": null,
-  "chain_l2_tx_count": 14,
-  "chain_total_gas_used": "8317841",
-  "chain_total_cost": "1024121796854650"
+  "chain_l2_tx_count": 15,
+  "chain_total_gas_used": "8796853",
+  "chain_total_cost": "1081571813667450"
 }

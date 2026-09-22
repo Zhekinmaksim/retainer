@@ -151,3 +151,31 @@ is not yet proof that the recipient received funds. See the official
 Prior deployments and failed transactions remain under `runs/initial-sdk-error/`
 and `runs/withdraw-sdk-error/`. The current deployment is recorded in
 `runs/deployment.json`; do not mix contract state across these runs.
+
+## Browser demo and Portal review
+
+The public app is https://zhekinmaksim.github.io/retainer/app.html.
+Its deployment is automated by `.github/workflows/pages.yml`. For a local
+build, run `npm ci && npm run build`, then `make serve` and open `/app.html`.
+
+Use two different funded Bradbury wallets: requester opens a brief, agent
+accepts and delivers, then judge and withdraw through the app. The prefilled
+spec is `calibration/demo-brief.json`, **not** the original reference spec.
+The latter remains UNDETERMINED in the published historical experiment.
+
+The app records the wallet EVM hash before waiting for the GenLayer transaction
+ID, resumes pending journal checks after reload, and labels ACCEPTED as
+provisional. Do not interpret consensus acceptance as successful execution
+or as a finalized withdrawal. Network failures are shown without automatic
+write retries.
+
+To rebuild the separate operational evidence:
+
+```bash
+make demo-report CONTRACT=0xe53c01FF26a6787Af29499668e80502195A3447B
+```
+
+This reads `runs/demo/bradbury.jsonl`, archives receipts under
+`runs/demo/receipts/`, and writes `web/demo-report.json`. It does not overwrite
+the original `web/report.json`. See `runs/demo/README.md` for the actual
+scenario outcomes and `submission/portal.md` for fields ready to paste.

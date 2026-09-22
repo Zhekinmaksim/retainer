@@ -324,9 +324,9 @@ class BradburyChain:
                 last = str(exc)
             else:
                 status = self.cr.status_of(receipt)
-                result = str((receipt or {}).get("execution_result", "")).upper()
+                result = str((receipt or {}).get("execution_result") or "").upper()
                 last = "%s / %s" % (status, result or "unknown execution")
-                if status in {"ACCEPTED", "FINALIZED"}:
+                if status in {"ACCEPTED", "FINALIZED"} and result:
                     if result not in {"SUCCESS", "FINISHED_WITH_RETURN"}:
                         raise RuntimeError("transaction %s failed: %s" % (tx, last))
                     return receipt

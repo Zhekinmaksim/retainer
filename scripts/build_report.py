@@ -54,11 +54,19 @@ def summarize(records: list, contract: str, source: str) -> dict:
     evidence = [r for r in records if r.get("receipt_available") is not False
                 and r.get("tx_status") in TERMINAL]
     by_brief = {}
+    active_scenarios = {}
     for r in evidence:
         bid = r.get("brief_id")
         if bid is None:
             continue
         scenario = r.get("scenario")
+        if scenario is not None:
+            active_scenarios[bid] = scenario
+        elif bid in active_scenarios:
+            # Agent writes contain brief_id but no scenario. Bind them to the
+            # preceding explicit attempt, updating on reuse of a failed ID.
+            scenario = active_scenarios[bid]
+            r = dict(r, scenario=scenario)
         key = ("scenario", str(scenario)) if scenario is not None else ("brief", str(bid))
         by_brief.setdefault(key, []).append(r)
 
@@ -204,6 +212,13 @@ def summarize(records: list, contract: str, source: str) -> dict:
             "No confirmed scenario-3 forgery fooled the judge with PASS and was then "
             "rejected by a BROKEN defence. UNVERIFIABLE alone is not proof that "
             "a forgery was caught. The live defence demonstration is inconclusive.")
+    for scenario in scenarios:
+        if (str(scenario["scenario"]) == "3" and scenario["forgery_attempted"]
+                and scenario["judge_raw"] == "FAIL"):
+            report["honesty"].append(
+                "Scenario 3: the forged delivery received FAIL from the original "
+                "judge. The attack did not fool the judge, so protection against "
+                "a fooled judge remains unproven.")
     if any(s["defence"] == ["BROKEN", "BROKEN"] for s in scenarios):
         report["honesty"].append("BROKEN/BROKEN records only one executed defence round: the contract skips round two after round one fails.")
     report["honesty"].append(

@@ -1,0 +1,181 @@
+{
+  "hash": "0x98d43a442f6be9197de0cd9989da19b500bc18e105adf5ee56885c83a3c5af60",
+  "rollup_transaction_hash": "0x6eae2316e94f94a75848f9f3e52024364f91b355b003440f72f8836e1d900c02",
+  "from_address": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+  "from_address_type": "ACCOUNT",
+  "to_address": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+  "to_address_type": "CONTRACT",
+  "status": "accepted",
+  "submission_timestamp": 1790063071,
+  "activation_timestamp": 1790063072,
+  "finalization_timestamp": 0,
+  "value": "25000",
+  "fee": "183464100",
+  "leader_timeout": "0",
+  "validator_timeout": "0",
+  "starting_block_number": "22533943",
+  "data": {
+    "function": "addTransaction",
+    "params": {
+      "encoded_data": {
+        "contract_code": null,
+        "calldata": {
+          "encoding": "base64",
+          "content": "eyJhcmdzIjogWzJdLCAibWV0aG9kIjogImFjY2VwdCJ9"
+        },
+        "leader_only": false,
+        "tx_data": null
+      },
+      "_sender": "0x8431ba9c0539c0a19c3cce5d8de222c0da29c5d9",
+      "_calldata": "d8961604617267730d11066d6574686f643461636365707400",
+      "_recipient": "0xe53c01ff26a6787af29499668e80502195a3447b",
+      "_validUntil": 1790066665,
+      "_maxRotations": 3,
+      "_numOfInitialValidators": 5
+    }
+  },
+  "acceptance_messages": "",
+  "finalization_messages": "",
+  "transaction_type": "CONTRACT_CALL",
+  "deployed_contract_address": null,
+  "validators": [
+    "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499",
+    "0x4FC292d5D255Ec8Ad4cdcd36c5E188dfEE9D160e",
+    "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+    "0x27276953fa2052A5178Ae5a3D114a3DFB9A2fC98",
+    "0x9D998aD7C7f9Cc448A4DbDf49edD7CADBe3d57B6"
+  ],
+  "leader": "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499",
+  "activator": "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+  "queue": {
+    "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+    "current_queue_type": "accepted",
+    "pending_slot": 9,
+    "current_slot": null,
+    "pending_queue_count": 0,
+    "current_position": null,
+    "transactions_ahead": null,
+    "transactions_ahead_at_submission": null,
+    "queue_length_at_submission": null,
+    "created_timestamp": null,
+    "created_block": null,
+    "created_rollup_transaction_hash": null,
+    "eligible_timestamp": 1790063071,
+    "eligible_block": 22533943,
+    "eligible_rollup_transaction_hash": "0x6eae2316e94f94a75848f9f3e52024364f91b355b003440f72f8836e1d900c02",
+    "selected_activator": "0xB7551beF37a05995218f9a1BB7A93e5B6705f535"
+  },
+  "created_at": 1790063078,
+  "updated_at": 1790063082,
+  "execution_result": "FINISHED_WITH_RETURN",
+  "epoch": 161,
+  "enrichment_data": {
+    "rounds": [
+      {
+        "round": 0,
+        "result": "majority_agree",
+        "validators": [
+          {
+            "vote": "finished_with_return",
+            "address": "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+            "vote_hash": "0xdf26f8763926b7765fd16e8089e8ff66ed9c08523e41999fda3ced18e80aad38",
+            "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x4FC292d5D255Ec8Ad4cdcd36c5E188dfEE9D160e",
+            "vote_hash": "0x523d39ac0c7588c5845753e24ead508c5fbf8a066890cf290465f48007781a22",
+            "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x27276953fa2052A5178Ae5a3D114a3DFB9A2fC98",
+            "vote_hash": "0x13d238cf2f47cccad45c6829a895445978ac0e88437dc2b9dc1d387fc42560e0",
+            "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x59dC5E6fD7428c5Ee6fc24aE2B99E5860A9c9499",
+            "vote_hash": "0xf09e0a8c58fdca659911f60b653ba5ca558e8e997f7b40e9a1fc7916ce02cbb2",
+            "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x9D998aD7C7f9Cc448A4DbDf49edD7CADBe3d57B6",
+            "vote_hash": "0x9352299abfc4d377192f40839919fd87e14e9b9f13fb0b06d449d7b008ce5466",
+            "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1"
+          }
+        ],
+        "appeal_bond": null,
+        "leader_index": 3,
+        "rotations_left": 3,
+        "votes_revealed": 5,
+        "votes_committed": 5
+      }
+    ],
+    "traces": {
+      "0": {
+        "reason": "debug_rpc_not_configured",
+        "trace_status": "unavailable"
+      }
+    },
+    "messages": [],
+    "transaction": {
+      "id": "0x98d43a442f6be9197de0cd9989da19b500bc18e105adf5ee56885c83a3c5af60",
+      "epoch": 161,
+      "result": "majority_agree",
+      "sender": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+      "status": "accepted",
+      "tx_slot": 9,
+      "calldata": "0xd8961604617267730d11066d6574686f643461636365707400",
+      "activator": "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+      "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+      "tx_origin": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+      "block_range": {
+        "proposal": null,
+        "activation": [
+          22533945,
+          22533946,
+          22533948
+        ],
+        "processing": null
+      },
+      "random_seed": "0x7a52c2b9f1c89d32b27e1327a18b6a8b56d91c33126b06a71e71f88e590557ce",
+      "result_hash": "0xaf40fa35e56ea8307c9f6ed77df8bc751dea01ead2bd9f7f58a7e79878d036c1",
+      "valid_until": 1790066665,
+      "eq_outputs_raw": "0xc786706164646564",
+      "execution_hash": "0x2c0266ffd6b4faf29a1d4e734f44b4352391dfba207cae53f81abd58f5a99c95",
+      "num_validators": 5,
+      "previous_status": "uninitialized",
+      "execution_result": "finished_with_return",
+      "initial_rotations": 3
+    }
+  },
+  "enrichment_status": "enriched",
+  "virtual_state": {
+    "source": "consensus_data",
+    "materialized_status": "accepted",
+    "computed_status": "accepted",
+    "status_changed": false,
+    "can_finalize": false,
+    "current_timestamp": 1790063720,
+    "finalization_ready_at": 1790064878,
+    "finalization_elapsed_seconds": null,
+    "action_hint": "wait_for_finalization_window",
+    "transition_reason": "finalization_wait",
+    "idleness_stage": null,
+    "expected_actor_role": null,
+    "needs_materialization": false
+  },
+  "validator_vote_type": null,
+  "validator_vote_result": null,
+  "validator_effective_vote": null,
+  "validator_is_leader": null,
+  "validator_rotation_number": null,
+  "validator_appeal_number": null,
+  "validator_majority_alignment": null,
+  "validator_proposal_outcome": null,
+  "chain_l2_tx_count": 14,
+  "chain_total_gas_used": "7583815",
+  "chain_total_cost": "979203674786400"
+}

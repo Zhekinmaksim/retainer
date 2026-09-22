@@ -98,6 +98,14 @@ hr{border:0;height:1px;margin:0;
   padding-bottom:1px}
 .siblings a:hover{color:var(--ink);border-color:var(--held)}
 
+.siblings .live-link{color:var(--held);border-bottom:2px solid var(--held);font-weight:700}
+.demo-summary{border-left:2px solid var(--held);background:var(--sheet);padding:20px 24px;margin:16px 0 28px}
+.demo-summary h2{font-size:var(--t-h3);max-width:none;margin:0 0 10px}
+.demo-summary p{font-size:var(--t-small);margin:0 0 10px}
+.demo-summary .demo-links{font-family:var(--display);font-size:var(--t-label);display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:14px}
+.demo-stats{font-family:var(--display);font-size:var(--t-prose);font-weight:500}
+.demo-outcomes{font-size:var(--t-small);padding-left:20px;margin:12px 0}
+.demo-outcomes li{padding:4px 0}
 /* -------------------------------------------------------------------- hero */
 /* Security-paper guilloche. It is the material the page is printed on, and it
    drifts and breathes just enough to read as alive, then stops where the
@@ -385,6 +393,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
       Retainer
     </div>
     <nav class="siblings">
+      <a class="live-link" href="app.html">Open live app</a>
       <a href="https://github.com/Zhekinmaksim/jastrow">Jastrow</a>
       <a href="https://github.com/Zhekinmaksim/suborn">Suborn</a>
       <a href="https://github.com/Zhekinmaksim/retainer">Repository</a>
@@ -402,7 +411,15 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     money follows the verdict. <em>No platform sits in the middle deciding.</em></p>
   </div>
 
-  <p class="note" id="live-metric" aria-live="polite">Loading the Bradbury measurement. Read the published report below.</p>
+  <div class="demo-summary" aria-labelledby="demo-heading">
+    <h2 id="demo-heading">Live operational demo</h2>
+    <p>A separate run uses an exact, explicit acceptance spec. The original reference gate remains UNDETERMINED; these results do not replace that measurement.</p>
+    <p class="demo-stats" id="demo-stats" aria-live="polite">Loading the operational demo receipts…</p>
+    <ul class="demo-outcomes" id="demo-outcomes"></ul>
+    <p class="note">A settlement is a contract credit, not a withdrawal. ACCEPTED receipts are provisional until FINALIZED.</p>
+    <div class="demo-links"><a href="app.html">Open live app</a><a href="demo-report.json">Operational demo report</a><a href="https://github.com/Zhekinmaksim/retainer/tree/main/runs/demo">Demo receipts &amp; reproduction</a></div>
+  </div>
+  <p class="note" id="live-metric" aria-live="polite">Loading the original reference measurement. Read its report below.</p>
 
   <div class="device">
       <div class="device-head">
@@ -591,14 +608,12 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
 
 <div class="shell">
   <section>
-    <h2>Four scenarios, live status</h2>
-    <p class="section-lede">The fourth is the one nothing else in this track can
-    show: a job that never opened, because nobody could say what finishing it
-    would mean.</p>
+    <h2>Original reference experiment</h2>
+    <p class="section-lede">These four scenarios belong to the original reference measurement in report.json. Its blocked runs and zero defence rounds remain on record, separately from the operational demo above.</p>
     <div class="empty" id="empty-note">
       <h3>Live report not loaded</h3>
       <p>The scenarios below describe the planned tests. Their measured outcomes
-      load from <a href="report.json">the receipt-backed report</a>. If this notice
+      load from <a href="report.json">the original receipt-backed report</a>. If this notice
       remains visible, open that report directly.</p>
     </div>
 
@@ -664,6 +679,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     <h2>What this page is not claiming</h2>
     <p>Every number above comes from a Bradbury receipt with a real validator
     address, or it is not shown at all.</p>
+    <p>The notes below describe the original reference experiment. Operational-demo outcomes are reported separately above.</p>
     <ul id="honesty">
       <li>Live outcomes require the published report. The interactive devices are offline rehearsals.</li>
       <li>The gate and the defence run inside the Retainer contract. Jastrow and Suborn receipts are linked evidence, not cross-contract calls.</li>
@@ -1026,7 +1042,7 @@ function apply(report) {
     var receipts = report.terminal_receipts;
     if (Number.isInteger(receipts) && receipts > 0) {
       var metric = document.getElementById("live-metric");
-      metric.textContent = receipts + " terminal Bradbury receipt" + (receipts === 1 ? "" : "s")
+      metric.textContent = "Original reference experiment: " + receipts + " terminal Bradbury receipt" + (receipts === 1 ? "" : "s")
         + " published. ";
       var reference = (report.scenarios || []).find(function (s) { return Number(s.scenario) === 1; });
       if (reference) {
@@ -1035,7 +1051,7 @@ function apply(report) {
       }
       var evidence = document.createElement("a");
       evidence.href = "report.json";
-      evidence.textContent = "Inspect the live report";
+      evidence.textContent = "Inspect the original report";
       metric.appendChild(evidence);
     }
   } else {
@@ -1070,6 +1086,41 @@ function apply(report) {
     a.href = "https://explorer-bradbury.genlayer.com/contracts/" + report.contract;
   }
 }
+
+function applyDemo(report) {
+  var metric = document.getElementById("demo-stats");
+  if (!report || report.source !== "bradbury") {
+    metric.textContent = "Operational demo report unavailable. Open the linked receipts or inspect the live app; no demo result is inferred.";
+    return;
+  }
+  var figures = [];
+  [["terminal_receipts", "terminal receipts"], ["settled", "settled briefs"], ["defence_rounds_run", "defence rounds run"], ["forgeries_caught", "forgeries caught"]].forEach(function (entry) {
+    if (Number.isInteger(report[entry[0]]) && report[entry[0]] >= 0) figures.push(report[entry[0]] + " " + entry[1]);
+  });
+  metric.textContent = figures.length ? figures.join(" · ") : "Bradbury demo report loaded; inspect individual outcomes below.";
+  var host = document.getElementById("demo-outcomes");
+  host.textContent = "";
+  var labels = {1: "Honest delivery", 2: "Failure against the spec", 3: "Forged instructions", 4: "Ambiguous brief"};
+  (report.scenarios || []).forEach(function (scenario) {
+    var item = document.createElement("li");
+    var parts = [labels[Number(scenario.scenario)] || "Brief " + scenario.brief_id];
+    if (scenario.gate) parts.push("gate " + scenario.gate);
+    if (scenario.status) parts.push(scenario.status);
+    if (scenario.verdict) parts.push("verdict " + scenario.verdict);
+    if (scenario.judge_raw) parts.push("judge " + scenario.judge_raw);
+    if (Array.isArray(scenario.defence)) parts.push("defence " + scenario.defence.filter(Boolean).join(" / "));
+    var statuses = (scenario.transactions || []).map(function (transaction) { return transaction.tx_status; }).filter(Boolean);
+    if (statuses.length) parts.push("latest receipt " + statuses[statuses.length - 1]);
+    item.textContent = parts.join(" · ");
+    if (Number(scenario.scenario) === 3) item.appendChild(document.createTextNode(". A caught forgery requires a judge flip followed by a defence overturn; a FAIL alone does not demonstrate that protection."));
+    host.appendChild(item);
+  });
+}
+try {
+  fetch("demo-report.json", {cache: "no-store"})
+    .then(function (response) { return response.ok ? response.json() : null; })
+    .catch(function () { return null; }).then(applyDemo);
+} catch (error) { applyDemo(null); }
 
 try {
   fetch("report.json", {cache: "no-store"})

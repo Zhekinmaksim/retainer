@@ -1,0 +1,11 @@
+{
+  "scenario": 3,
+  "call": "open_brief",
+  "contract": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+  "status": "EVM_REVERTED_BEFORE_GENLAYER_HASH",
+  "evm_tx": "0xff41d6b7d9d363f4c35bbfc80f1dbe5756b64aadaef299687fae471d1d8585be",
+  "consensus_contract": "0x0112Bf6e83497965A5fdD6Dad1E447a6E004271D",
+  "account": "recuse-deployer",
+  "value": 100000,
+  "error": "genlayer-js sendWithEncodedData: consensus submission reverted; no GenLayer hash returned. No dependent transactions sent."
+}

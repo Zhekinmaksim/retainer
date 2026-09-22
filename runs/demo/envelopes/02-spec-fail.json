@@ -1,0 +1,6 @@
+{
+  "version": "retainer/1",
+  "brief_id": 2,
+  "body": "Integration write-up is live. Covers the setup, the two failure modes we hit, and the fix.",
+  "author_note": "scenario 2: real work, but the spec asked for a hashtag and a link"
+}

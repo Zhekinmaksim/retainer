@@ -111,6 +111,26 @@ class ReceiptEvidenceTests(unittest.TestCase):
         report = self.report(scenario=1, call='open_brief', gate='DECIDABLE')
         self.assertEqual(report['blocked_scenarios'], [])
 
+    def test_agent_rows_inherit_preceding_scenario_without_double_counting(self):
+        opened = self.record(scenario=1, brief_id=1, call='open_brief',
+                             status='OPEN', gate='DECIDABLE', verdict='',
+                             defence_a='PENDING', defence_b='PENDING')
+        judged = dict(opened, scenario=None, call='judge', status='SETTLED',
+                      verdict='PASS', defence_a='HELD', defence_b='HELD')
+        report = summarize([opened, judged], '0xcontract', 'bradbury')
+        self.assertEqual(len(report['scenarios']), 1)
+        self.assertEqual(report['scenarios'][0]['scenario'], 1)
+        self.assertEqual(report['settled'], 1)
+        self.assertEqual(report['opened'], 1)
+        self.assertEqual(report['defence_rounds_run'], 2)
+        self.assertEqual(len(report['scenarios'][0]['transactions']), 2)
+
+    def test_scenario_three_fail_is_explicitly_not_defence_proof(self):
+        report = self.report(judge_raw='FAIL', verdict='FAIL',
+                             defence_a='HELD', defence_b='HELD')
+        self.assertEqual(report['forgeries_caught'], 0)
+        self.assertTrue(any('attack did not fool the judge' in line for line in report['honesty']))
+
     def test_collector_preserves_raw_evidence(self):
         tx = '0x' + 'b' * 64
         receipt = {'status': 'accepted', 'fee': '173300700', 'validators': ['v1'],

@@ -242,7 +242,7 @@
     "computed_status": "undetermined",
     "status_changed": false,
     "can_finalize": false,
-    "current_timestamp": 1790061643,
+    "current_timestamp": 1790063146,
     "finalization_ready_at": 1790063241,
     "finalization_elapsed_seconds": null,
     "action_hint": "wait_for_finalization_window",

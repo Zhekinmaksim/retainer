@@ -1,0 +1,6 @@
+{
+  "url": "http://127.0.0.1:8080/app.html",
+  "account": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+  "errors": [],
+  "note": "Real browser UI with EIP-1193 provider bridged locally to a keychain-held test account. No key in browser; no hosted signer; not a browser-extension test."
+}

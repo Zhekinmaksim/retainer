@@ -71,7 +71,7 @@ const keytar = keytarModule.default || keytarModule;
 const configPath = resolve(process.env.GENLAYER_CONFIG || "~/.genlayer/genlayer-config.json".replace("~", process.env.HOME));
 let config = {};
 try { config = JSON.parse(readFileSync(configPath, "utf8")); } catch { /* use env/account fallback */ }
-const accountName = option("--account", config.activeAccount || "");
+const accountName = option("--account", process.env.GENLAYER_ACCOUNT || config.activeAccount || "");
 let keychainPrivateKey = null;
 if (accountName) {
   try {

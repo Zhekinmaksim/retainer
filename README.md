@@ -25,7 +25,26 @@ witness. Retainer holds the money until the verdict.
 | [Suborn](https://github.com/Zhekinmaksim/suborn) | [`0xA8920A9Ee4027c8793F966045B38fea062491e91`](https://explorer-bradbury.genlayer.com/contracts/0xA8920A9Ee4027c8793F966045B38fea062491e91) | measures whether a spec survives adversarial evidence |
 | Retainer | [`0xe53c01FF26a6787Af29499668e80502195A3447B`](https://explorer-bradbury.genlayer.com/contracts/0xe53c01FF26a6787Af29499668e80502195A3447B) | holds fee and stake, settles on the verdict |
 
-## Live result — 22 September 2026
+## Live app and operational demo
+
+[Open the Bradbury app](https://zhekinmaksim.github.io/retainer/app.html) to read
+the deployed contract without a wallet, or connect two funded test accounts
+to open, accept, deliver, judge and withdraw. The transaction journal saves
+broadcast hashes, resumes on reload and distinguishes provisional consensus
+from finalization and execution success.
+
+A **separate, explicit acceptance spec** in [demo-brief.json](calibration/demo-brief.json)
+opened successfully. The Python agent accepted brief #1, delivered its composed
+body and settled with **PASS / HELD / HELD**. Brief #2, missing the required
+strings, settled with **FAIL / HELD / HELD**. A forged waiver in brief #3 also
+received **FAIL / HELD / HELD**: the judge was not fooled, so this does not
+prove the defence can overturn a forged PASS. These results do not replace the
+original reference experiment below. [Operational run notes](runs/demo/README.md)
+and the [demo report](web/demo-report.json) record the full outcomes and limits.
+
+For Portal submission, use the [prepared fields and review path](submission/portal.md).
+
+## Original reference result — 22 September 2026
 
 The reference brief did **not** open: its embedded gate transaction ended
 [`UNDETERMINED`](https://explorer-bradbury.genlayer.com/transactions/0x167de357f5bd008c4d5371222f3c22da20b201f9f0f6c1c597b78fdcc70ee323).
@@ -36,7 +55,9 @@ delivery therefore remain untested on this specification.
 The deliberately vague brief returned **AMBIGUOUS / REJECTED**
 ([receipt](https://explorer-bradbury.genlayer.com/transactions/0xe732478306e829a59e01f5aee6fefb9566ac0ae88526f77c15f4b1aa1b852530)).
 The agent read it and declined: `not open (REJECTED)`.
-**Zero live defence rounds ran. The forgery defence has not been demonstrated.**
+**Zero live defence rounds ran in this original reference experiment.**
+See the separate operational demo above for subsequent defence execution;
+execution alone does not establish that an attempted forgery was caught.
 
 [Full run notes](runs/README.md), [receipt-backed report](web/report.json),
 [submission manifest](runs/bradbury.jsonl), and [raw receipts](runs/receipts/)
@@ -183,3 +204,17 @@ they are backed by receipts from Bradbury with real validator addresses.
 ## Licence
 
 MIT.
+
+## Run the browser app locally
+
+```bash
+npm ci
+npm run build
+make serve
+```
+
+Open `http://localhost:8080/app.html`. The app uses the pinned GenLayer JS SDK
+and an injected EIP-1193 wallet. Signing keys stay in the wallet; there is no
+server wallet. `npm run build` bundles the browser entrypoint; GitHub Pages
+rebuilds and publishes `web/` on pushes to main. `make check` runs offline
+contract, agent and receipt-pipeline checks.

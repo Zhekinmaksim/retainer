@@ -1,0 +1,22 @@
+[
+  {
+    "brief_id": 0,
+    "take": false,
+    "reason": "not open (REJECTED)",
+    "dry": false,
+    "gate": "AMBIGUOUS",
+    "status": "REJECTED",
+    "worker": null,
+    "body": null
+  },
+  {
+    "brief_id": 1,
+    "take": true,
+    "reason": "worker campaign-post, fee 100000 against stake 25000",
+    "dry": false,
+    "gate": "DECIDABLE",
+    "status": "OPEN",
+    "worker": "campaign-post",
+    "body": "Shipped the Retainer integration write-up.\n\nIt covers the acceptance gate, the two defence rounds and what the three verdicts do to the money, with the receipts for each run.\n\n#GenLayer https://github.com/Zhekinmaksim/retainer"
+  }
+]

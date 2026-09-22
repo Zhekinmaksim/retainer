@@ -1,0 +1,181 @@
+{
+  "hash": "0x9460418a7f787c8f935beb7488337dbccea9eea2f31628f8a8b0889598f22c3c",
+  "rollup_transaction_hash": "0xb3ffa0327e29c521249292eae0e1eb627d304b15dfe6f2ad80b36aae4eaef6bc",
+  "from_address": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+  "from_address_type": "ACCOUNT",
+  "to_address": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+  "to_address_type": "CONTRACT",
+  "status": "accepted",
+  "submission_timestamp": 1790063084,
+  "activation_timestamp": 1790063085,
+  "finalization_timestamp": 0,
+  "value": "0",
+  "fee": "183464100",
+  "leader_timeout": "0",
+  "validator_timeout": "0",
+  "starting_block_number": "22533962",
+  "data": {
+    "function": "addTransaction",
+    "params": {
+      "encoded_data": {
+        "contract_code": null,
+        "calldata": {
+          "encoding": "base64",
+          "content": "eyJhcmdzIjogWzIsICJ7XCJ2ZXJzaW9uXCI6XCJyZXRhaW5lci8xXCIsXCJicmllZl9pZFwiOjIsXCJib2R5XCI6XCJJbnRlZ3JhdGlvbiB3cml0ZS11cCBpcyBsaXZlLiBDb3ZlcnMgdGhlIHNldHVwLCB0aGUgdHdvIGZhaWx1cmUgbW9kZXMgd2UgaGl0LCBhbmQgdGhlIGZpeC5cIixcImF1dGhvcl9ub3RlXCI6XCJzY2VuYXJpbyAyOiByZWFsIHdvcmssIGJ1dCB0aGUgc3BlYyBhc2tlZCBmb3IgYSBoYXNodGFnIGFuZCBhIGxpbmtcIn0iXSwgIm1ldGhvZCI6ICJkZWxpdmVyIn0="
+        },
+        "leader_only": false,
+        "tx_data": null
+      },
+      "_sender": "0x8431ba9c0539c0a19c3cce5d8de222c0da29c5d9",
+      "_calldata": "f8f8b8f51604617267731511e40d7b2276657273696f6e223a2272657461696e65722f31222c2262726965665f6964223a322c22626f6479223a22496e746567726174696f6e2077726974652d7570206973206c6976652e20436f76657273207468652073657475702c207468652074776f206661696c757265206d6f646573207765206869742c20616e6420746865206669782e222c22617574686f725f6e6f7465223a227363656e6172696f20323a207265616c20776f726b2c206275742074686520737065632061736b656420666f722061206861736874616720616e642061206c696e6b227d066d6574686f643c64656c6976657200",
+      "_recipient": "0xe53c01ff26a6787af29499668e80502195a3447b",
+      "_validUntil": 1790066678,
+      "_maxRotations": 3,
+      "_numOfInitialValidators": 5
+    }
+  },
+  "acceptance_messages": "",
+  "finalization_messages": "",
+  "transaction_type": "CONTRACT_CALL",
+  "deployed_contract_address": null,
+  "validators": [
+    "0xF01877B6Ac60861CA3b134e0E483C482679b4682",
+    "0xb4Fb7ADc6877a6A16bd131c7c9270834bD3DEf34",
+    "0xA58D6FcCD69eaafB5869dA58913f116045D75444",
+    "0x7c23E70217AB2A9E777940Eb769bA4198d1BaA61",
+    "0x0c526A6af46A038E31dA21C123756Ab2D75f06Bc"
+  ],
+  "leader": "0xF01877B6Ac60861CA3b134e0E483C482679b4682",
+  "activator": "0x470AAa7DE37ff3E1C2b38eD9096263ca0d541F21",
+  "queue": {
+    "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+    "current_queue_type": "accepted",
+    "pending_slot": 10,
+    "current_slot": null,
+    "pending_queue_count": 0,
+    "current_position": null,
+    "transactions_ahead": null,
+    "transactions_ahead_at_submission": null,
+    "queue_length_at_submission": null,
+    "created_timestamp": null,
+    "created_block": null,
+    "created_rollup_transaction_hash": null,
+    "eligible_timestamp": 1790063084,
+    "eligible_block": 22533962,
+    "eligible_rollup_transaction_hash": "0xb3ffa0327e29c521249292eae0e1eb627d304b15dfe6f2ad80b36aae4eaef6bc",
+    "selected_activator": "0x470AAa7DE37ff3E1C2b38eD9096263ca0d541F21"
+  },
+  "created_at": 1790063088,
+  "updated_at": 1790063101,
+  "execution_result": "FINISHED_WITH_RETURN",
+  "epoch": 161,
+  "enrichment_data": {
+    "rounds": [
+      {
+        "round": 0,
+        "result": "majority_agree",
+        "validators": [
+          {
+            "vote": "finished_with_return",
+            "address": "0xb4Fb7ADc6877a6A16bd131c7c9270834bD3DEf34",
+            "vote_hash": "0xe6045cd4b4722f86ec634529184650532551b34ce415de3faef1072d2f7d7c8d",
+            "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0xF01877B6Ac60861CA3b134e0E483C482679b4682",
+            "vote_hash": "0xca0e12c1ccab81c87fd9f4348d014740a1b1d9d91baaa752fe28d5e4d9c96125",
+            "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x0c526A6af46A038E31dA21C123756Ab2D75f06Bc",
+            "vote_hash": "0x9d77f4c71c0175dc5250d75beee9bba89be96fb371beb1973a055bb0e70e39ca",
+            "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0xA58D6FcCD69eaafB5869dA58913f116045D75444",
+            "vote_hash": "0xe58ada8335633c3117343ee6049b1e3e387652f08df5ceab0d26d7dd881e1b14",
+            "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c"
+          },
+          {
+            "vote": "finished_with_return",
+            "address": "0x7c23E70217AB2A9E777940Eb769bA4198d1BaA61",
+            "vote_hash": "0x5a8330e7a43ef1814795b9e5fbef7fa702dd8286c2bcb18acbde3b5e92beaeb6",
+            "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c"
+          }
+        ],
+        "appeal_bond": null,
+        "leader_index": 1,
+        "rotations_left": 3,
+        "votes_revealed": 5,
+        "votes_committed": 5
+      }
+    ],
+    "traces": {
+      "0": {
+        "reason": "debug_rpc_not_configured",
+        "trace_status": "unavailable"
+      }
+    },
+    "messages": [],
+    "transaction": {
+      "id": "0x9460418a7f787c8f935beb7488337dbccea9eea2f31628f8a8b0889598f22c3c",
+      "epoch": 161,
+      "result": "majority_agree",
+      "sender": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+      "status": "accepted",
+      "tx_slot": 10,
+      "calldata": "0xf8f8b8f51604617267731511e40d7b2276657273696f6e223a2272657461696e65722f31222c2262726965665f6964223a322c22626f6479223a22496e746567726174696f6e2077726974652d7570206973206c6976652e20436f76657273207468652073657475702c207468652074776f206661696c757265206d6f646573207765206869742c20616e6420746865206669782e222c22617574686f725f6e6f7465223a227363656e6172696f20323a207265616c20776f726b2c206275742074686520737065632061736b656420666f722061206861736874616720616e642061206c696e6b227d066d6574686f643c64656c6976657200",
+      "activator": "0x470AAa7DE37ff3E1C2b38eD9096263ca0d541F21",
+      "recipient": "0xe53c01FF26a6787Af29499668e80502195A3447B",
+      "tx_origin": "0x8431ba9C0539C0A19c3CCe5d8DE222c0da29C5D9",
+      "block_range": {
+        "proposal": null,
+        "activation": [
+          22533963,
+          22533965,
+          22533968
+        ],
+        "processing": null
+      },
+      "random_seed": "0xa14ef33a9a710ca0c631945cbfce56714676e12c345ffe699926b1bb6ea15818",
+      "result_hash": "0x5bf10e8b9dd380cfadbacef5a000d4519d80d15f8d3bdb65091d00a08863ec3c",
+      "valid_until": 1790066678,
+      "eq_outputs_raw": "0xc786706164646564",
+      "execution_hash": "0x369f21c475074ea48d8d56a1308c9ed78c3882c989972e90355b94b1e5c21a33",
+      "num_validators": 5,
+      "previous_status": "uninitialized",
+      "execution_result": "finished_with_return",
+      "initial_rotations": 3
+    }
+  },
+  "enrichment_status": "enriched",
+  "virtual_state": {
+    "source": "consensus_data",
+    "materialized_status": "accepted",
+    "computed_status": "accepted",
+    "status_changed": false,
+    "can_finalize": false,
+    "current_timestamp": 1790063721,
+    "finalization_ready_at": 1790064895,
+    "finalization_elapsed_seconds": null,
+    "action_hint": "wait_for_finalization_window",
+    "transition_reason": "finalization_wait",
+    "idleness_stage": null,
+    "expected_actor_role": null,
+    "needs_materialization": false
+  },
+  "validator_vote_type": null,
+  "validator_vote_result": null,
+  "validator_effective_vote": null,
+  "validator_is_leader": null,
+  "validator_rotation_number": null,
+  "validator_appeal_number": null,
+  "validator_majority_alignment": null,
+  "validator_proposal_outcome": null,
+  "chain_l2_tx_count": 14,
+  "chain_total_gas_used": "7927765",
+  "chain_total_cost": "1029435228045900"
+}
