@@ -402,6 +402,8 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     money follows the verdict. <em>No platform sits in the middle deciding.</em></p>
   </div>
 
+  <p class="note" id="live-metric" aria-live="polite">Bradbury measurement pending. No live receipts published yet.</p>
+
   <div class="device">
       <div class="device-head">
         <span>One brief, settled three ways</span>
@@ -453,6 +455,35 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
       </div>
     </div>
 </div>
+</div>
+<hr>
+
+<div class="shell">
+  <section>
+    <h2>How this differs from what already exists</h2>
+    <div class="diff">
+      <div class="diff-row">
+        <div class="who">Apolo</div>
+        <p>Checks freelance delivery evidence before payment. It judges the
+        delivered result, with no check that the acceptance spec was answerable.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">MergeProof</div>
+        <p>Staked review and settlement, scoped to pull requests.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">Internet Court</div>
+        <p>Returns jury verdicts after a dispute has already started. Retainer's
+        whole point is that the dispute is prevented at open time.</p>
+      </div>
+      <div class="diff-row">
+        <div class="who">GHBounty, Rally</div>
+        <p>Pay on verified outcomes inside their own verticals.</p>
+      </div>
+    </div>
+    <p class="diff-close">All of them judge the answer. Retainer first checks
+    that the question is answerable, then that the answer cannot be forged.</p>
+  </section>
 </div>
 <hr>
 
@@ -599,35 +630,6 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
         <div class="state"><span class="pending">Not yet run.</span></div>
       </div>
     </div>
-  </section>
-</div>
-<hr>
-
-<div class="shell">
-  <section>
-    <h2>How this differs from what already exists</h2>
-    <div class="diff">
-      <div class="diff-row">
-        <div class="who">Apolo</div>
-        <p>Checks freelance delivery evidence before payment. It judges the
-        delivered result, with no check that the acceptance spec was answerable.</p>
-      </div>
-      <div class="diff-row">
-        <div class="who">MergeProof</div>
-        <p>Staked review and settlement, scoped to pull requests.</p>
-      </div>
-      <div class="diff-row">
-        <div class="who">Internet Court</div>
-        <p>Returns jury verdicts after a dispute has already started. Retainer's
-        whole point is that the dispute is prevented at open time.</p>
-      </div>
-      <div class="diff-row">
-        <div class="who">GHBounty, Rally</div>
-        <p>Pay on verified outcomes inside their own verticals.</p>
-      </div>
-    </div>
-    <p class="diff-close">All of them judge the answer. Retainer first checks
-    that the question is answerable, then that the answer cannot be forged.</p>
   </section>
 </div>
 <hr>
@@ -1008,6 +1010,16 @@ function apply(report) {
   var note = document.getElementById("empty-note");
   if (report.source === "bradbury") {
     note.parentNode.removeChild(note);
+    var receipts = report.terminal_receipts;
+    if (Number.isInteger(receipts) && receipts > 0) {
+      var metric = document.getElementById("live-metric");
+      metric.textContent = receipts + " terminal Bradbury receipt" + (receipts === 1 ? "" : "s")
+        + " published. ";
+      var evidence = document.createElement("a");
+      evidence.href = "report.json";
+      evidence.textContent = "Inspect the live report";
+      metric.appendChild(evidence);
+    }
   } else {
     note.querySelector("h3").textContent = "Showing a " + report.source + " snapshot";
     note.querySelector("p").textContent =

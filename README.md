@@ -24,6 +24,18 @@ witness. Retainer holds the money until the verdict.
 | [Suborn](https://github.com/Zhekinmaksim/suborn) | [`0xA8920A9Ee4027c8793F966045B38fea062491e91`](https://explorer-bradbury.genlayer.com/contracts/0xA8920A9Ee4027c8793F966045B38fea062491e91) | measures whether a spec survives adversarial evidence |
 | Retainer | *deploying* | holds fee and stake, settles on the verdict |
 
+## How it differs from what already exists in this track
+
+- **Apolo** checks freelance delivery evidence before payment. It judges the
+  delivered result. It has no check that the acceptance spec was answerable.
+- **MergeProof** does staked review and settlement, on pull requests only.
+- **Internet Court** returns AI-jury verdicts after a dispute has already
+  started. Retainer's whole point is that the dispute is prevented at open time.
+- **GHBounty**, **Rally** pay on verified outcomes inside their own verticals.
+
+All of them judge the answer. Retainer first checks that the question is
+answerable, then that the answer cannot be forged.
+
 ## The cycle
 
 ```
@@ -90,18 +102,6 @@ measurement, and it is described that way everywhere it appears.
 
 That distinction is deliberate. A demo that cannot fall over because of another
 contract is worth more than an architecture diagram.
-
-## How it differs from what already exists in this track
-
-- **Apolo** checks freelance delivery evidence before payment. It judges the
-  delivered result. It has no check that the acceptance spec was answerable.
-- **MergeProof** does staked review and settlement, on pull requests only.
-- **Internet Court** returns AI-jury verdicts after a dispute has already
-  started. Retainer's whole point is that the dispute is prevented at open time.
-- **GHBounty**, **Rally** pay on verified outcomes inside their own verticals.
-
-All of them judge the answer. Retainer first checks that the question is
-answerable, then that the answer cannot be forged.
 
 ## Run it
 
