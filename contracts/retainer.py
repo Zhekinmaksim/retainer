@@ -287,7 +287,7 @@ class Retainer(gl.Contract):
         self.briefs.append(
             Brief(
                 requester=gl.message.sender_address,
-                agent=Address.ZERO,
+                agent=Address("0x" + "00" * 20),
                 title=title,
                 spec=spec,
                 spec_hash=spec_hash,
@@ -696,7 +696,7 @@ Nothing else.
                 class Write:
                     pass
 
-            _Recipient(Address(gl.message.sender_address)).emit_transfer(
+            _Recipient(gl.message.sender_address).emit_transfer(
                 value=u256(amount)
             )
         else:

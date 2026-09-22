@@ -46,6 +46,37 @@ RECORD_FIELDS = (
 )
 
 
+def exact_wei(value):
+    """Reject lossy numbers; explorer amounts are integer wei."""
+    if isinstance(value, bool) or not isinstance(value, (int, str)):
+        return None
+    text = str(value)
+    return text if re.fullmatch(r"[0-9]+", text) else None
+
+
+def gen_amount(wei):
+    value = exact_wei(wei)
+    if value is None:
+        return None
+    whole, fraction = divmod(int(value), 10 ** 18)
+    return "%d.%018d" % (whole, fraction)
+
+
+def receipt_evidence(receipt):
+    receipt = receipt or {}
+    fee = exact_wei(receipt.get("fee"))
+    cost = exact_wei(receipt.get("chain_total_cost"))
+    return {
+        "receipt_available": bool(receipt),
+        "validators": receipt.get("validators", []),
+        "leader": receipt.get("leader"),
+        "execution_result": receipt.get("execution_result"),
+        "consensus_rounds": (receipt.get("enrichment_data") or {}).get("rounds", []),
+        "fee_wei": fee, "fee_gen": gen_amount(fee),
+        "chain_total_cost_wei": cost, "chain_total_cost_gen": gen_amount(cost),
+    }
+
+
 def fetch_json(url: str, timeout: int) -> dict:
     req = urllib.request.Request(url, headers={"accept": "application/json"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -207,10 +238,13 @@ def main() -> int:
     ap.add_argument("--from-json", default="", help="cached receipts, for offline runs")
     ap.add_argument("--examples", default=os.path.join(root, "examples"))
     ap.add_argument("--out", required=True)
+    ap.add_argument("--receipts-dir", default="", help="raw receipts; defaults to receipts/ beside the manifest")
     ap.add_argument("--wait", type=int, default=0, help="seconds to keep polling non-terminal transactions")
     args = ap.parse_args()
 
     rows = load_manifest(args.manifest)
+    receipts_dir = args.receipts_dir or os.path.join(os.path.dirname(os.path.abspath(args.manifest)), "receipts")
+    os.makedirs(receipts_dir, exist_ok=True)
     cache = json.load(open(args.from_json, encoding="utf-8")) if args.from_json else None
 
     # One read per brief, not per transaction: a brief is touched by open,
@@ -241,11 +275,25 @@ def main() -> int:
                 time.sleep(4)
             state = briefs.get(bid)
 
+        receipt_path = None
+        if receipt:
+            if not re.fullmatch(r"[A-Za-z0-9_-]+", tx):
+                raise ValueError("invalid transaction hash for receipt filename")
+            receipt_path = os.path.join(receipts_dir, tx + ".json")
+            with open(receipt_path, "w", encoding="utf-8") as fh:
+                json.dump(receipt, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
         st = status_of(receipt)
         if st not in TERMINAL:
             pending.append(tx)
             continue
 
+        # A failed open does not reserve brief_id. A later successful open may
+        # reuse it, so its current storage is not evidence for this transaction.
+        execution_result = (receipt or {}).get("execution_result")
+        if st == "UNDETERMINED" or (execution_result is not None
+                and execution_result != "FINISHED_WITH_RETURN"):
+            state = None
         state = state or {}
         if not state:
             # Terminal on the explorer but no state on chain. This is the exact
@@ -257,6 +305,10 @@ def main() -> int:
         body, note = envelope_body(env_hash, args.examples) if env_hash else ("", "")
 
         records.append({
+            **receipt_evidence(receipt),
+            "receipt_path": os.path.relpath(receipt_path, root) if receipt_path else None,
+            "scenario": row.get("scenario"),
+            "forgery_attempted": row.get("forgery_attempted", False),
             "brief_id": bid,
             "call": row.get("call", ""),
             "spec_hash": state.get("spec_hash", row.get("spec_hash", "")),
@@ -275,7 +327,7 @@ def main() -> int:
 
     with open(args.out, "w", encoding="utf-8") as f:
         for r in records:
-            f.write(json.dumps({k: r[k] for k in RECORD_FIELDS}, ensure_ascii=False) + "\n")
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     print("%d records -> %s" % (len(records), args.out))
     if pending:

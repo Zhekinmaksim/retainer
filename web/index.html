@@ -554,7 +554,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     <h2>Three verdicts, not two</h2>
     <p class="section-lede">Without a third verdict the entire attack surface
     collapses to one move: make the deliverable unreadable and get paid anyway.
-    Unverifiable freezes the payment instead of releasing it. Nobody is punished
+    Unverifiable returns the fee and stake to their owners as withdrawable balances. Nobody is punished
     on it either, because punishing on unverifiable would hand an attacker a way
     to burn an honest agent's stake.</p>
 
@@ -591,7 +591,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
 
 <div class="shell">
   <section>
-    <h2>Four runs on Bradbury</h2>
+    <h2>Four scenarios, live status</h2>
     <p class="section-lede">The fourth is the one nothing else in this track can
     show: a job that never opened, because nobody could say what finishing it
     would mean.</p>
@@ -603,30 +603,29 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     </div>
 
     <div id="scenarios">
-      <div class="scen" data-brief="0">
+      <div class="scen" data-brief="0" data-scenario="1">
         <div><h3>Honest acceptance</h3>
-        <p>Work that meets the pinned spec. The judge says pass, both defence
-        rounds agree, and the fee is released.</p></div>
+        <p>Planned test: work that meets the pinned spec, followed by judging,
+        two defence rounds and payment. Requires an open brief.</p></div>
         <div class="state"><span class="pending">Not yet run.</span></div>
       </div>
-      <div class="scen" data-brief="1">
+      <div class="scen" data-brief="1" data-scenario="2">
         <div><h3>Failure against the spec</h3>
-        <p>Real work that misses what the spec asked for. The stake is slashed,
-        and the reason is a rule written before the job started.</p></div>
+        <p>Planned test: real work that misses what the spec asked for.
+        Requires an open brief before failure and stake settlement can be tested.</p></div>
         <div class="state"><span class="pending">Not yet run.</span></div>
       </div>
-      <div class="scen" data-brief="2">
+      <div class="scen" data-brief="2" data-scenario="3">
         <div><h3>Caught forgery</h3>
         <p>A deliverable carrying text addressed to the judge, arguing that the
-        requirements were waived. The judge is flipped, the defence overturns
-        it, and nothing is paid.</p></div>
+        requirements were waived. A caught forgery requires a live judge flip
+        followed by a defence overturn. Without that sequence, the test is inconclusive.</p></div>
         <div class="state"><span class="pending">Not yet run.</span></div>
       </div>
-      <div class="scen" data-brief="3">
+      <div class="scen" data-brief="3" data-scenario="4">
         <div><h3>The brief that never opens</h3>
-        <p>An acceptance spec nobody could apply the same way twice. The gate
-        refuses it and the fee goes straight back, so there is no job to
-        dispute.</p></div>
+        <p>A deliberately vague acceptance spec. This tests whether the gate
+        refuses the brief; a validator split is reported separately from a refusal.</p></div>
         <div class="state"><span class="pending">Not yet run.</span></div>
       </div>
     </div>
@@ -983,24 +982,38 @@ countSpec();
    the reader sees an honest empty page rather than a blank one.
    ========================================================================== */
 
+function escapeText(value) {
+  return String(value).replace(/[&<>"']/g, function (c) {
+    return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c];
+  });
+}
+
 function line(label, value) {
-  return "<div><span>" + label + "</span><b>" + value + "</b></div>";
+  return "<div><span>" + escapeText(label) + "</span><b>" + escapeText(value) + "</b></div>";
 }
 
 function tx(hash) {
+  if (!/^0x[0-9a-fA-F]{64}$/.test(hash)) return escapeText(hash);
   return "<a class='hex' href='https://explorer-bradbury.genlayer.com/transactions/"
     + hash + "'>" + hash.slice(0, 10) + "\u2026</a>";
 }
 
 function stateOf(s) {
-  return line("Gate", s.gate || "\u2014")
+  return line("Gate", s.gate || "Not established")
+    + line("State", s.status || "Not established")
+    + (s.note ? line("Agent", s.note) : "")
+    + (s.defence_rounds_run != null ? line("Defence rounds run", s.defence_rounds_run) : "")
     + (s.verdict ? line("Verdict", s.verdict) : "")
     + (s.judge_raw && s.judge_raw !== s.verdict ? line("Judge said", s.judge_raw) : "")
     + (s.defence && s.defence[0]
         ? line("Defence", s.defence.filter(Boolean).join(" / ")) : "")
     + (s.transactions || []).filter(function (t) { return t.tx; }).map(
         function (t) {
-          return "<div><span>" + t.call + "</span>" + tx(t.tx) + "</div>";
+          return "<div><span>" + escapeText(t.call) + "</span>" + tx(t.tx) + "</div>"
+            + line("Transaction", t.tx_status || "Unknown")
+            + (t.execution_result ? line("Execution", t.execution_result) : "")
+            + (t.fee_gen != null ? line("Receipt fee (GEN)", t.fee_gen) : "")
+            + (t.validators ? line("Validators", t.validators.length) : "");
         }).join("");
 }
 
@@ -1015,6 +1028,11 @@ function apply(report) {
       var metric = document.getElementById("live-metric");
       metric.textContent = receipts + " terminal Bradbury receipt" + (receipts === 1 ? "" : "s")
         + " published. ";
+      var reference = (report.scenarios || []).find(function (s) { return Number(s.scenario) === 1; });
+      if (reference) {
+        var gateResult = reference.gate || ((reference.transactions || [])[0] || {}).tx_status;
+        if (gateResult) metric.textContent += "Reference gate: " + gateResult + ". ";
+      }
       var evidence = document.createElement("a");
       evidence.href = "report.json";
       evidence.textContent = "Inspect the live report";
@@ -1028,13 +1046,22 @@ function apply(report) {
   }
 
   (report.scenarios || []).forEach(function (s) {
-    var host = document.querySelector('.scen[data-brief="' + s.brief_id + '"] .state');
+    var host = s.scenario != null
+      ? document.querySelector('.scen[data-scenario="' + Number(s.scenario) + '"] .state')
+      : document.querySelector('.scen[data-brief="' + Number(s.brief_id) + '"] .state');
     if (host) host.innerHTML = stateOf(s);
+  });
+
+  (report.blocked_scenarios || []).forEach(function (s) {
+    var host = document.querySelector('.scen[data-scenario="' + Number(s.scenario) + '"] .state');
+    if (host) host.innerHTML = line("Status", "BLOCKED") + line("Reason", s.reason)
+      + line("Defence rounds run", 0)
+      + (s.depends_on ? "<div><span>Reference gate</span>" + tx(s.depends_on) + "</div>" : "");
   });
 
   if (report.honesty && report.honesty.length) {
     document.getElementById("honesty").innerHTML =
-      report.honesty.map(function (n) { return "<li>" + n + "</li>"; }).join("");
+      report.honesty.map(function (n) { return "<li>" + escapeText(n) + "</li>"; }).join("");
   }
 
   if (report.contract && report.source === "bradbury") {

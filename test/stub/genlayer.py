@@ -1,6 +1,6 @@
 """Local GenLayer stub. Enough surface to run contracts/retainer.py offline.
 
-Copied from suborn/test/stub/genlayer.py @ 9c7b0af, with u32 and Address.ZERO
+Copied from suborn/test/stub/genlayer.py @ 9c7b0af, with u32
 added from the Jastrow harness. Same approach as both: this is not a simulator of consensus.
 It is a way to exercise the state machine, the money, and the dedup without
 waiting on Bradbury. Consensus behaviour is faked by a scripted model that the
@@ -82,7 +82,7 @@ class DynArray(list):
     pass
 
 
-Address.ZERO = Address("0x" + "00" * 20)
+
 
 
 class _UserError(Exception):

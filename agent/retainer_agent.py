@@ -228,6 +228,10 @@ class LocalChain:
         self.gl = gl
         self.glmod = glmod
 
+    def wait_success(self, tx):
+        """Stub writes execute synchronously."""
+        return None
+
     def _as(self, value=0):
         self.gl.message.sender_address = self.me
         self.gl.message.value = value
@@ -263,10 +267,12 @@ class BradburyChain:
     """Reads through `genlayer call`, writes through the SDK bridge, because
     that CLI does not expose --value for payable calls."""
 
-    def __init__(self, address, endpoint="", timeout=60):
+    def __init__(self, address, endpoint="", timeout=60, wait_timeout=600, poll=5):
         self.address = address
         self.endpoint = endpoint
         self.timeout = timeout
+        self.wait_timeout = wait_timeout
+        self.poll = poll
         sys.path.insert(0, os.path.join(ROOT, "scripts"))
         import collect_receipts as cr  # reuse the parser that already works
         self.cr = cr
@@ -280,10 +286,18 @@ class BradburyChain:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=self.timeout)
         if r.returncode != 0:
             raise RuntimeError((r.stdout + r.stderr).strip())
+        # The CLI renders scalar results inline, unlike object results.
+        scalar = re.search(r"(?m)^Result:\s*([0-9]+)n?\s*$", r.stdout)
+        if scalar:
+            return int(scalar.group(1))
+        if re.fullmatch(r"[0-9]+n?", r.stdout.strip()):
+            return int(r.stdout.strip().rstrip("n"))
         return self.cr.extract_json(r.stdout)
 
     def _write(self, method, args=None, args_json=None, value=0):
         cmd = ["node", WRITER, self.address, method, "--value", str(value)]
+        if self.endpoint:
+            cmd += ["--rpc", self.endpoint]
         if args_json is not None:
             cmd += ["--args-json", args_json]
         elif args:
@@ -293,7 +307,34 @@ class BradburyChain:
             raise RuntimeError((r.stdout + r.stderr).strip())
         out = (r.stdout or "").strip()
         found = re.search(r"0x[0-9a-fA-F]{64}", out)
-        return found.group(0) if found else out
+        if not found:
+            raise RuntimeError("write returned no transaction hash: " + out)
+        return found.group(0)
+
+    def wait_success(self, tx):
+        """Consensus acceptance alone does not prove execution succeeded."""
+        deadline = time.monotonic() + self.wait_timeout
+        last = "no receipt"
+        while time.monotonic() < deadline:
+            try:
+                receipt = self.cr.fetch_receipt(
+                    self.cr.EXPLORER, tx,
+                    min(self.timeout, max(0.1, deadline - time.monotonic())))
+            except (OSError, ValueError) as exc:
+                last = str(exc)
+            else:
+                status = self.cr.status_of(receipt)
+                result = str((receipt or {}).get("execution_result", "")).upper()
+                last = "%s / %s" % (status, result or "unknown execution")
+                if status in {"ACCEPTED", "FINALIZED"}:
+                    if result not in {"SUCCESS", "FINISHED_WITH_RETURN"}:
+                        raise RuntimeError("transaction %s failed: %s" % (tx, last))
+                    return receipt
+                if status in {"UNDETERMINED", "ERROR", "CANCELED", "CANCELLED",
+                              "REJECTED", "FAILED", "DROPPED"}:
+                    raise RuntimeError("transaction %s failed: %s" % (tx, last))
+            time.sleep(min(self.poll, max(0, deadline - time.monotonic())))
+        raise TimeoutError("transaction %s did not succeed before timeout: %s" % (tx, last))
 
     def brief_count(self):
         return int(self._call("brief_count"))
@@ -334,7 +375,19 @@ def manifest(path, **fields):
         fh.write(json.dumps(fields, ensure_ascii=False) + "\n")
 
 
-def work(chain, policy, log=print, settle=False, manifest_path="", dry=False):
+def record_decisions(path, decisions):
+    if path:
+        temporary = path + ".tmp"
+        with open(temporary, "w", encoding="utf-8") as fh:
+            json.dump(decisions, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        os.replace(temporary, path)
+
+
+def work(chain, policy, log=print, settle=False, manifest_path="", dry=False,
+         decisions_path=""):
+    decisions = []
+    record_decisions(decisions_path, decisions)
     taken, skipped = [], []
     count = chain.brief_count()
     log("scanning %d brief(s)" % count)
@@ -343,6 +396,11 @@ def work(chain, policy, log=print, settle=False, manifest_path="", dry=False):
         brief = chain.get_brief(i)
         d = appraise(brief, policy)
         log("  brief %d  %s" % (i, d))
+        decisions.append({"brief_id": i, "take": d.take, "reason": d.why,
+                          "dry": dry, "gate": brief["gate"], "status": brief["status"],
+                          "worker": d.worker.name if d.worker else None,
+                          "body": d.body})
+        record_decisions(decisions_path, decisions)
         if not d.take:
             skipped.append((i, d.why))
             continue
@@ -353,6 +411,7 @@ def work(chain, policy, log=print, settle=False, manifest_path="", dry=False):
         stake = int(brief["stake_required"])
         tx = chain.accept(i, stake)
         manifest(manifest_path, call="accept", brief_id=i, stake=stake, tx=tx)
+        chain.wait_success(tx)
 
         env = {"version": ENVELOPE_VERSION, "brief_id": i, "body": d.body,
                "author_note": "composed by %s" % d.worker.name}
@@ -362,13 +421,16 @@ def work(chain, policy, log=print, settle=False, manifest_path="", dry=False):
 
         env_hash = chain.deliver(i, env)
         manifest(manifest_path, call="deliver", brief_id=i,
-                 envelope_hash=envtool.envelope_hash(env), tx=env_hash)
+                 envelope_hash=envtool.envelope_hash(env), body=d.body,
+                 author_note=env["author_note"], tx=env_hash)
+        chain.wait_success(env_hash)
         log("    delivered, envelope %s" % envtool.envelope_hash(env)[:16])
 
         if settle:
             verdict = chain.judge(i)
             manifest(manifest_path, call="judge", brief_id=i, tx=verdict)
-            log("    verdict %s" % verdict)
+            chain.wait_success(verdict)
+            log("    settled, transaction %s" % verdict)
         taken.append((i, d.why))
 
     return taken, skipped
@@ -387,6 +449,9 @@ def main() -> int:
                     help="also call judge; it is open to either party")
     ap.add_argument("--dry", action="store_true", help="appraise only, stake nothing")
     ap.add_argument("--manifest", default="")
+    ap.add_argument("--decisions", default="", help="write appraisal decisions as JSON")
+    ap.add_argument("--wait-timeout", type=float, default=600,
+                    help="maximum seconds to await each successful transaction")
     args = ap.parse_args()
 
     policy = {"min_fee": args.min_fee, "max_stake": args.max_stake,
@@ -399,9 +464,9 @@ def main() -> int:
         print("error: --address or --local", file=sys.stderr)
         return 2
 
-    chain = BradburyChain(args.address, args.endpoint)
+    chain = BradburyChain(args.address, args.endpoint, wait_timeout=args.wait_timeout)
     taken, skipped = work(chain, policy, settle=args.settle,
-                          manifest_path=args.manifest, dry=args.dry)
+                          manifest_path=args.manifest, dry=args.dry, decisions_path=args.decisions)
     print("\ntook %d, skipped %d" % (len(taken), len(skipped)))
     for i, why in skipped:
         print("  brief %d skipped: %s" % (i, why))

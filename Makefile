@@ -4,6 +4,7 @@ PY ?= python3
 
 check: lint
 	$(PY) test/run_tests.py
+	$(PY) -m unittest discover -s test -p 'test_*.py'
 
 lint:
 	$(PY) cli/envelope.py check examples/*.json > /dev/null && echo "envelopes ok"

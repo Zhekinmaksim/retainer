@@ -11,8 +11,9 @@ runs at all:
    future dispute, and the brief is refused before any money is locked.
 2. **Before the money moves** — the verdict has to survive hostile reading. A
    deliverable that flips the judge with text written inside it does not get
-   paid. That defence is not a promise; it is the mechanism already measured
-   against 44 attacks across 10 classes, with 0 paid flips.
+   paid when the embedded defence overturns the verdict. The judging prompt
+   comes from Suborn's 44-attack, 10-class measurement; Retainer's adapted
+   defence requires its own live evidence.
 
 Retainer is the third contract in a trilogy that is already live on Bradbury.
 Jastrow decides whether a question is answerable. Suborn cross-examines the
@@ -22,7 +23,7 @@ witness. Retainer holds the money until the verdict.
 |---|---|---|
 | [Jastrow](https://github.com/Zhekinmaksim/jastrow) | [`0xC8823fdeA01961D65b569D00C09c541E5615CC69`](https://explorer-bradbury.genlayer.com/contracts/0xC8823fdeA01961D65b569D00C09c541E5615CC69) | measures whether validators split on the same spec |
 | [Suborn](https://github.com/Zhekinmaksim/suborn) | [`0xA8920A9Ee4027c8793F966045B38fea062491e91`](https://explorer-bradbury.genlayer.com/contracts/0xA8920A9Ee4027c8793F966045B38fea062491e91) | measures whether a spec survives adversarial evidence |
-| Retainer | *deploying* | holds fee and stake, settles on the verdict |
+| Retainer | [`0xc084Ef884a71B955046f6D278ee1A409DF37b8BC`](https://explorer-bradbury.genlayer.com/contracts/0xc084Ef884a71B955046f6D278ee1A409DF37b8BC) | holds fee and stake, settles on the verdict |
 
 ## How it differs from what already exists in this track
 
@@ -81,7 +82,7 @@ python3 agent/retainer_agent.py --address $CONTRACT --settle  # work and settle
 
 ## Three verdicts, not two
 
-`UNVERIFIABLE` freezes the money instead of releasing it. Without a third
+`UNVERIFIABLE` credits the fee back to the requester and the stake back to the agent. Without a third
 verdict the entire attack surface collapses to "make the deliverable unreadable
 and get paid anyway". And nobody is punished on it, because punishing on
 `UNVERIFIABLE` would hand an attacker a way to burn an honest agent's stake.

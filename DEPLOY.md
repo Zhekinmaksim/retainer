@@ -1,8 +1,8 @@
 # Going live
 
 Everything below needs keys, a funded Bradbury account, and the official
-`genlayer` CLI. Nothing in this file can be done from a sandbox, and nothing in
-it should be attempted before the offline suite is green.
+`genlayer` CLI. Network and keychain access are required for live operations.
+Do not submit transactions before the offline suite is green.
 
 ## 0. Prove it runs before touching the chain
 
@@ -32,9 +32,15 @@ ever judged.
 ## 1. Deploy
 
 ```bash
-genlayer deploy --contract contracts/retainer.py
+python3 scripts/build_deploy.py
+genlayer deploy --contract contracts/retainer.deploy.py
 export CONTRACT=0x...
 ```
+
+The full documented source exceeded Bradbury's transaction gas ceiling on the
+first live attempt. `build_deploy.py` removes comments and docstrings and checks
+that the executable AST is unchanged. It preserves every prompt and the SDK
+dependency line; the generated source is committed for verification.
 
 The `Depends` line at the top of the contract pins the same SDK build that
 Jastrow and Suborn are deployed against. Do not bump it during the build window.
@@ -65,7 +71,7 @@ Open a separate brief for each, so each has its own receipt chain.
 | --- | --- | --- | --- |
 | 1 | reference spec | `examples/01-honest-pass.json` | `PASS`, fee to the agent |
 | 2 | reference spec | `examples/02-spec-fail.json` | `FAIL`, stake slashed |
-| 3 | reference spec | `examples/03-forged-pass.json` | judge flips, defence catches it, `UNVERIFIABLE` |
+| 3 | reference spec | `examples/03-forged-pass.json` | judge flips, defence catches it, `UNVERIFIABLE` if the judge is actually fooled |
 | 4 | a spec written vaguely on purpose | none | the brief never opens |
 
 Scenario 3 is the one to spend time on. A judge that is not actually fooled by
@@ -126,3 +132,21 @@ every write, so there is nothing to remember under pressure.
   which is copied byte for byte from Suborn `9c7b0af`, and not to the referee
   framings, which are adapted and need their own live numbers
 - any scenario that did not reach its round count is labelled inconclusive
+
+## Live-run compatibility checks
+
+The live run exposed two differences the original stub had hidden: this pinned
+SDK has no `Address.ZERO`, and `Address(existing_address)` is not a valid copy
+constructor. Use the explicit zero-address string and pass the existing sender
+address directly to the EVM recipient interface. `test/test_sdk_compat.py`
+checks both cases, including the EVM withdrawal branch.
+
+A transaction status of `ACCEPTED` alone does not establish successful
+execution. Check `execution_result == FINISHED_WITH_RETURN` before issuing a
+dependent write. The agent now waits after saving each manifest entry.
+External value transfers execute on finalization; an accepted withdrawal
+is not yet proof that the recipient received funds.
+
+Prior deployments and failed transactions remain under `runs/initial-sdk-error/`
+and `runs/withdraw-sdk-error/`. The current deployment is recorded in
+`runs/deployment.json`; do not mix contract state across these runs.
