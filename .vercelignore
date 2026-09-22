@@ -1,0 +1,7 @@
+.git
+node_modules
+runs
+submission
+test
+**/__pycache__
+.env*

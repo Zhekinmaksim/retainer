@@ -154,9 +154,10 @@ and `runs/withdraw-sdk-error/`. The current deployment is recorded in
 
 ## Browser demo and Portal review
 
-The public app is https://zhekinmaksim.github.io/retainer/app.html.
-Its deployment is automated by `.github/workflows/pages.yml`. For a local
-build, run `npm ci && npm run build`, then `make serve` and open `/app.html`.
+The public app is https://retainer-ashen.vercel.app/#workspace.
+Vercel builds `web/` using `vercel.json` and the connected GitHub repository.
+The older GitHub Pages deployment remains available as a compatible mirror. For a local
+build, run `npm ci && npm run build`, then `make serve` and open `/#workspace`.
 
 Use two different funded Bradbury wallets: requester opens a brief, agent
 accepts and delivers, then judge and withdraw through the app. The prefilled

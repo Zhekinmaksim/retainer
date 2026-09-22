@@ -8,6 +8,22 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://retainer-ashen.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Retainer">
+<meta property="og:title" content="Retainer — Acceptance before payment.">
+<meta property="og:description" content="A live GenLayer escrow for agent work. Pin the spec, stake, deliver and let consensus judge the result.">
+<meta property="og:url" content="https://retainer-ashen.vercel.app/">
+<meta property="og:image" content="https://retainer-ashen.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Retainer. Acceptance before payment. Built on GenLayer, Bradbury testnet.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Retainer — Acceptance before payment.">
+<meta name="twitter:description" content="A live GenLayer escrow for agent work, with on-chain judgments and public receipts.">
+<meta name="twitter:image" content="https://retainer-ashen.vercel.app/og.png">
+<meta name="twitter:image:alt" content="Retainer. Acceptance before payment.">
 <meta name="theme-color" content="#DCE5E2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -376,6 +392,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     padding-top:18px;min-height:0}
 }
 </style>
+<link rel="stylesheet" href="app.css">
 </head>
 <body>
 
@@ -393,7 +410,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
       Retainer
     </div>
     <nav class="siblings">
-      <a class="live-link" href="app.html">Open live app</a>
+      <a class="live-link" href="#workspace">Open live workspace</a>
       <a href="https://github.com/Zhekinmaksim/jastrow">Jastrow</a>
       <a href="https://github.com/Zhekinmaksim/suborn">Suborn</a>
       <a href="https://github.com/Zhekinmaksim/retainer">Repository</a>
@@ -411,14 +428,6 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     money follows the verdict. <em>No platform sits in the middle deciding.</em></p>
   </div>
 
-  <div class="demo-summary" aria-labelledby="demo-heading">
-    <h2 id="demo-heading">Live operational demo</h2>
-    <p>A separate run uses an exact, explicit acceptance spec. The original reference gate remains UNDETERMINED; these results do not replace that measurement.</p>
-    <p class="demo-stats" id="demo-stats" aria-live="polite">Loading the operational demo receipts…</p>
-    <ul class="demo-outcomes" id="demo-outcomes"></ul>
-    <p class="note">A settlement is a contract credit, not a withdrawal. ACCEPTED receipts are provisional until FINALIZED.</p>
-    <div class="demo-links"><a href="app.html">Open live app</a><a href="demo-report.json">Operational demo report</a><a href="https://github.com/Zhekinmaksim/retainer/tree/main/runs/demo">Demo receipts &amp; reproduction</a></div>
-  </div>
   <p class="note" id="live-metric" aria-live="polite">Loading the original reference measurement. Read its report below.</p>
 
   <div class="device">
@@ -500,6 +509,35 @@ footer a{text-decoration:none;border-bottom:1px solid var(--rule)}
     </div>
     <p class="diff-close">All of them judge the answer. Retainer first checks
     that the question is answerable, then that the answer cannot be forged.</p>
+  </section>
+</div>
+<hr>
+
+<div class="shell">
+  <section id="workspace" aria-labelledby="workspace-heading">
+    <p class="eyebrow">Live contract · Bradbury testnet</p>
+    <h2 id="workspace-heading">Put the brief on the record.</h2>
+    <p class="section-lede">Read the ledger below, or connect a wallet to commission and deliver work. Each action goes to the same live contract.</p>
+    <p class="workspace-contract">Contract <a id="contract-link" class="hex" target="_blank" rel="noopener"></a></p>
+<div class="notice"><strong>Test tokens only.</strong> The original reference brief ended UNDETERMINED. This app offers a separate, explicit demo spec; its gate can still refuse consensus. Delivered jobs have no timed refund if judging remains undetermined. Deadlines count contract writes, not time. <a href="#honesty">Read the evidence.</a></div>
+<div class="walletbar" aria-label="Wallet"><div><strong id="wallet-name">Read-only visitor</strong><p id="wallet-detail">Connect a browser wallet to submit transactions.</p></div><div class="actions"><button id="connect" type="button">Connect wallet</button><button id="refresh" type="button">Refresh chain</button></div></div>
+<p id="notice" role="status" aria-live="polite">Reading Bradbury…</p>
+<div aria-labelledby="ledger-heading"><div class="section-heading"><h2 id="ledger-heading">Live contract ledger</h2><span id="updated">Awaiting RPC</span></div><div id="overview" class="workspace-metrics"><p>Loading live state…</p></div><p class="workspace-caption">Contract state is read directly from Bradbury. Recent accepted changes remain provisional until their transaction is FINALIZED.</p></div>
+<div class="workspace-columns"><div class="brief-panel" aria-labelledby="brief-heading"><h2 id="brief-heading">Inspect a brief</h2><label for="brief-select">Brief on chain</label><select id="brief-select"><option value="">Loading…</option></select><div id="brief-detail"><p>No brief selected.</p></div><div id="brief-actions" class="actions"></div><form id="delivery-form" hidden><label for="delivery-body">Delivery body</label><textarea id="delivery-body" rows="5" required maxlength="8192"></textarea><p class="workspace-caption">Only the accepted agent can deliver. The contract wraps this body in a retainer/1 evidence envelope.</p><button type="button" id="sample-body">Use demo delivery</button><button type="submit">Submit delivery</button></form><details><summary>Raw chain record</summary><pre id="raw-record">No record loaded.</pre></details></div>
+<div class="create-panel" aria-labelledby="create-heading"><h2 id="create-heading">Open a new brief</h2><p>The gate evaluates your spec before opening the job. A rejected gate credits the fee back; withdraw it separately.</p><form id="open-form"><label for="brief-title">Title</label><input id="brief-title" required maxlength="200"><label for="brief-spec">Acceptance specification</label><textarea id="brief-spec" rows="8" required maxlength="8192"></textarea><label for="probes">Probe bodies (JSON array of strings)</label><textarea id="probes" rows="5" required></textarea><div class="form-pair"><div><label for="fee">Fee (wei)</label><input id="fee" inputmode="numeric" pattern="[0-9]+" required value="100000"></div><div><label for="stake">Agent stake (wei)</label><input id="stake" inputmode="numeric" pattern="[0-9]+" required value="25000"></div></div><label for="horizon">Horizon (contract writes, 1–1000)</label><input id="horizon" type="number" min="1" max="1000" value="1000" required><p class="workspace-caption">1 GEN = 10¹⁸ wei. The wallet also charges network fees. The requester cannot accept their own brief.</p><div class="actions"><button type="button" id="preset">Restore demo spec</button><button class="primary" type="submit" id="open-button" disabled>Open &amp; escrow fee</button></div></form></div></div>
+<div aria-labelledby="balance-heading" class="balance"><h2 id="balance-heading">Your credited balance</h2><p><strong id="credit">Connect wallet to read your balance.</strong></p><button type="button" id="withdraw" disabled>Withdraw credit</button><p class="workspace-caption">Settlement credits an internal balance. A withdrawal is a separate transaction. ACCEPTED is provisional; inspect its finalized receipt and recipient balance to verify receipt of tokens.</p></div>
+<div aria-labelledby="history-heading"><div class="section-heading"><h2 id="history-heading">Transaction journal</h2><button id="resume" type="button">Resume status checks</button></div><p class="workspace-caption">Saved in this browser before polling. Reloading resumes pending checks. Polling pauses after 30 minutes; the transaction continues on chain. A consensus decision and successful execution are separate checks.</p><div id="history"><p>No transactions submitted from this browser.</p></div></div>
+
+    <details class="demo-evidence"><summary>Published demo · receipts and outcomes</summary>
+  <div class="demo-summary" aria-labelledby="demo-heading">
+    <h2 id="demo-heading">Live operational demo</h2>
+    <p>A separate run uses an exact, explicit acceptance spec. The original reference gate remains UNDETERMINED; these results do not replace that measurement.</p>
+    <p class="demo-stats" id="demo-stats" aria-live="polite">Loading the operational demo receipts…</p>
+    <ul class="demo-outcomes" id="demo-outcomes"></ul>
+    <p class="note">A settlement is a contract credit, not a withdrawal. ACCEPTED receipts are provisional until FINALIZED.</p>
+    <div class="demo-links"><a href="#workspace">Open live workspace</a><a href="demo-report.json">Operational demo report</a><a href="https://github.com/Zhekinmaksim/retainer/tree/main/runs/demo">Demo receipts &amp; reproduction</a></div>
+  </div>
+    </details>
   </section>
 </div>
 <hr>
@@ -1129,5 +1167,6 @@ try {
     .then(apply);
 } catch (e) { /* no fetch here; the static page already says the truth */ }
 </script>
+<script type="module" src="app.bundle.js"></script>
 </body>
 </html>

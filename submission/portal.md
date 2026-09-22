@@ -22,7 +22,7 @@ The live browser app reads the contract, signs writes through your wallet and tr
 
 ### 01 — Inspect the existing live run
 
-Open https://zhekinmaksim.github.io/retainer/app.html. No wallet is needed to read the ledger. Select Brief #1 to inspect its DECIDABLE gate, stored delivery, PASS settlement and HELD / HELD defence results. Select Brief #2 for noncompliant work and Brief #3 for the forged waiver: both settled FAIL, with HELD / HELD. The judge was not fooled. Select Brief #0 to inspect the AMBIGUOUS / REJECTED brief. Follow Evidence & results for transaction receipts and the separate original reference experiment.
+Open https://retainer-ashen.vercel.app/#workspace. No wallet is needed to read the ledger. Select Brief #1 to inspect its DECIDABLE gate, stored delivery, PASS settlement and HELD / HELD defence results. Select Brief #2 for noncompliant work and Brief #3 for the forged waiver: both settled FAIL, with HELD / HELD. The judge was not fooled. Select Brief #0 to inspect the AMBIGUOUS / REJECTED brief. Expand Published demo · receipts and outcomes below the workspace for receipts; the original reference experiment remains further down the page.
 
 ### 02 — Open your own brief
 
@@ -46,7 +46,7 @@ https://explorer-bradbury.genlayer.com/contracts/0xe53c01FF26a6787Af29499668e805
 
 ## Project links
 
-**Website:** https://zhekinmaksim.github.io/retainer/app.html
+**Website:** https://retainer-ashen.vercel.app/#workspace
 
 **GitHub:** https://github.com/Zhekinmaksim/retainer
 
@@ -59,7 +59,7 @@ https://github.com/Zhekinmaksim/retainer
 Additional supporting links:
 
 - Operational demo: https://github.com/Zhekinmaksim/retainer/tree/main/runs/demo
-- Receipt-backed demo report: https://zhekinmaksim.github.io/retainer/demo-report.json
+- Receipt-backed demo report: https://retainer-ashen.vercel.app/demo-report.json
 - Original reference experiment, including failure: https://github.com/Zhekinmaksim/retainer/blob/main/runs/README.md
 - Live agent judgment: https://explorer-bradbury.genlayer.com/transactions/0x65a733b024141aa11af604e8bc7a890ec63fe2319038271fafef46e26ae21d54
 

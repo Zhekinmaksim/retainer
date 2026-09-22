@@ -19,7 +19,7 @@ function notify(message){$('notice').textContent=message;}
 function save(){localStorage.setItem(STORAGE,json(journal));}
 function element(tag,text,className){const node=document.createElement(tag);if(text!==undefined)node.textContent=String(text);if(className)node.className=className;return node;}
 function textInto(id,value){$(id).textContent=value;}
-function preset(){for(const [id,value] of Object.entries({title:demo.title,spec:demo.spec,probes:json(demo.probes),fee:demo.fee,stake:demo.stake_required,horizon:demo.horizon}))$(id).value=value;}
+function preset(){for(const [id,value] of Object.entries({'brief-title':demo.title,'brief-spec':demo.spec,probes:json(demo.probes),fee:demo.fee,stake:demo.stake_required,horizon:demo.horizon}))$(id).value=value;}
 function updateControls(){
  $('open-button').disabled=!account||busy;
  $('brief-select').disabled=busy;
@@ -177,12 +177,12 @@ $('resume').onclick=()=>{pollingUntil=Date.now()+30*60*1000;poll();};
 $('sample-body').onclick=()=>{$('delivery-body').value=demo.probes[0];};
 $('delivery-form').onsubmit=(event)=>{event.preventDefault();if(!selected)return;const body=$('delivery-body').value;if(!body.trim()||new TextEncoder().encode(body).length>8192){notify('Delivery must contain 1–8192 UTF-8 bytes.');return;}send('deliver',[Number(selected.brief_id),JSON.stringify({version:'retainer/1',brief_id:Number(selected.brief_id),body})]);};
 $('open-form').onsubmit=async(event)=>{event.preventDefault();try{
- const spec=$('spec').value,probes=JSON.parse($('probes').value),fee=BigInt($('fee').value),stake=BigInt($('stake').value),horizon=Number($('horizon').value);
+ const spec=$('brief-spec').value,probes=JSON.parse($('probes').value),fee=BigInt($('fee').value),stake=BigInt($('stake').value),horizon=Number($('horizon').value);
  if(!spec.trim()||[...spec].length>8192||fee<=0n||stake<=0n||!Number.isInteger(horizon)||horizon<1||horizon>1000)throw new Error('Enter a spec, positive integer amounts, and a horizon from 1 to 1000.');
  if(!Array.isArray(probes)||!probes.length||probes.length>8||probes.some(p=>typeof p!=='string'||!p.trim()||[...p].length>8192))throw new Error('Use 1–8 nonempty probe strings, each at most 8192 characters.');
  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(spec));
  const fingerprint=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
- await send('open_brief',[$('title').value,spec,fingerprint,JSON.stringify(probes),stake,horizon],fee);
+ await send('open_brief',[$('brief-title').value,spec,fingerprint,JSON.stringify(probes),stake,horizon],fee);
  }catch(error){notify(`Check new brief: ${error.message}`);}};
 function disconnect(){account=null;writer=null;credit=0n;textInto('wallet-name','Read-only visitor');textInto('wallet-detail','Account or network changed. Reconnect to confirm the selected Bradbury wallet.');textInto('credit','Connect wallet to read your balance.');updateControls();}
 window.ethereum?.on?.('accountsChanged',disconnect);window.ethereum?.on?.('chainChanged',disconnect);

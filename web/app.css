@@ -1,1 +1,65 @@
-:root{--stock:#DCE5E2;--sheet:#E6EDEA;--panel:#F0F4F2;--ink:#0E2320;--prose:#3A4A46;--rule:#B9C7C2;--held:#2438C9;font-family:Archivo,Arial,sans-serif;color:var(--ink);background:var(--stock);font-synthesis:none;font-variant-numeric:tabular-nums}*{box-sizing:border-box}body{margin:0}header,main{max-width:1180px;margin:auto;padding:0 clamp(20px,5vw,60px)}header{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:100px;border-bottom:1px dashed var(--rule)}a{color:inherit;text-underline-offset:4px}a:hover{color:var(--held)}.wordmark{text-decoration:none;font-size:24px;font-weight:700;letter-spacing:-.035em}.wordmark span{display:block;font-size:12px;letter-spacing:0;font-weight:400;margin-top:7px}nav{display:flex;gap:24px;font-size:14px}.intro{padding:44px 0 28px}.eyebrow{font-size:14px;margin:0 0 16px}h1{font-size:clamp(36px,5vw,52px);letter-spacing:-.04em;line-height:1.07;margin:0 0 20px;max-width:18ch}h2{font-size:27px;letter-spacing:-.028em;font-weight:500;margin:0 0 20px}h3{font-size:20px;font-weight:500;margin:24px 0 10px}.lede{font-family:Spectral,Georgia,serif;font-size:21px;line-height:1.5;max-width:55ch;margin:0 0 24px}p{line-height:1.55;color:var(--prose)}.contract{font-size:14px;overflow-wrap:anywhere}.contract a,code,pre{font-family:'DM Mono',monospace;font-size:12px}.notice{border-left:2px solid var(--held);padding:16px 20px;background:var(--sheet);font-size:14px;line-height:1.6}.walletbar{padding:24px 0;display:flex;gap:20px;align-items:center;justify-content:space-between}.walletbar p{font-size:14px;margin:5px 0;overflow-wrap:anywhere}.actions{display:flex;flex-wrap:wrap;gap:10px}button,select,input,textarea{font:inherit;border:1px solid var(--rule);border-radius:0;color:var(--ink);background:var(--panel);min-height:44px}button{padding:10px 16px;cursor:pointer;font-size:14px;font-weight:600}button:hover:not(:disabled){border-color:var(--held);color:var(--held)}button.primary{background:var(--held);color:white;border-color:var(--held)}button.primary:hover:not(:disabled){color:white;background:#182bba}button:disabled{opacity:.45;cursor:not-allowed}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--held);outline-offset:3px}#notice{min-height:25px;margin:0 0 28px;font-size:14px;border-bottom:1px dashed var(--rule);padding-bottom:18px;overflow-wrap:anywhere}.section-heading{display:flex;gap:20px;align-items:baseline;justify-content:space-between}.section-heading span{font-size:12px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule);background:var(--sheet)}.metric{padding:20px}.metric strong{display:block;font-size:27px;overflow-wrap:anywhere;font-weight:500}.metric span{font-size:14px;line-height:1.8}.caption{font-size:12px;line-height:1.6;max-width:85ch}.workspace{display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px dashed var(--rule);margin-top:32px;padding-top:36px}label{display:block;font-size:14px;margin:18px 0 8px}input,textarea,select{width:100%;padding:12px}textarea{line-height:1.5;resize:vertical;font-size:14px}select{margin-bottom:15px}.form-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}.create-panel>p{font-size:14px}.create-panel form>.actions{margin-top:24px}.brief-panel dl{display:grid;grid-template-columns:130px 1fr;gap:12px;font-size:14px}.brief-panel dt{color:var(--prose)}.brief-panel dd{margin:0;overflow-wrap:anywhere}.body-text{white-space:pre-wrap;overflow-wrap:anywhere;font-family:Spectral,Georgia,serif;font-size:17px;line-height:1.6}details{margin-top:28px}summary{cursor:pointer;font-size:14px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sheet);padding:16px;max-height:450px;overflow:auto}#delivery-form{margin-top:24px}#delivery-form button{margin:6px 6px 0 0}.balance,section:has(#history){border-top:1px dashed var(--rule);margin-top:44px;padding-top:32px}.journal-entry{border-bottom:1px solid var(--rule);padding:20px 0}.journal-entry h3{margin:0 0 10px}.journal-entry p{font-size:14px;margin:7px 0}.journal-entry a{overflow-wrap:anywhere;font-family:monospace;font-size:12px}.journal-entry details{margin-top:12px}footer{padding:45px 0;font-size:12px;line-height:1.8}.skip{position:absolute;left:20px;top:-60px;background:var(--panel);padding:10px}.skip:focus{top:10px}@media(max-width:740px){header{min-height:100px;gap:16px}nav{gap:12px;font-size:12px}.wordmark span{max-width:130px;line-height:1.5}.workspace{grid-template-columns:1fr;gap:40px}.create-panel{border-top:1px dashed var(--rule);padding-top:32px}.metrics{grid-template-columns:1fr 1fr}.metric{padding:15px}.walletbar{align-items:flex-start;flex-direction:column}.section-heading{align-items:flex-start;flex-wrap:wrap;gap:5px}.section-heading h2{margin-bottom:12px}.brief-panel dl{grid-template-columns:105px 1fr}h1{max-width:16ch}.form-pair{gap:10px}}
+/* The live workspace is a form printed on the original security-paper page.
+   Everything is scoped: the settlement device and editorial page retain their rules. */
+#workspace{scroll-margin-top:24px}
+#workspace .workspace-contract{font-family:var(--display);font-size:var(--t-label);overflow-wrap:anywhere;margin:24px 0}
+#workspace .notice{border-left:2px solid var(--held);padding:16px 20px;background:var(--sheet);font-size:var(--t-small);line-height:1.58;color:var(--prose)}
+#workspace .walletbar{padding:28px 0;display:flex;gap:20px;align-items:center;justify-content:space-between}
+#workspace .walletbar strong{font-family:var(--display);font-size:var(--t-small);font-weight:500}
+#workspace .walletbar p{font-size:var(--t-small);margin:5px 0;overflow-wrap:anywhere}
+#workspace .actions{display:flex;flex-wrap:wrap;gap:10px}
+#workspace button,#workspace select,#workspace input,#workspace textarea{font-family:var(--display);font-size:var(--t-label);font-weight:400;border:1px solid var(--rule);border-radius:0;color:var(--ink);background:var(--panel);min-height:44px}
+#workspace button{padding:10px 16px;cursor:pointer;line-height:1.4}
+#workspace button:hover:not(:disabled){border-color:var(--held);color:var(--held)}
+#workspace button.primary{background:var(--held);color:var(--panel);border-color:var(--held)}
+#workspace button.primary:hover:not(:disabled){color:var(--panel);background:var(--ink);border-color:var(--ink)}
+#workspace button:disabled{opacity:.45;cursor:not-allowed}
+#workspace #notice{min-height:25px;margin:0 0 28px;font-family:var(--display);font-size:var(--t-label);border-bottom:1px dashed var(--rule);padding-bottom:18px;overflow-wrap:anywhere;max-width:none}
+#workspace .section-heading{display:flex;gap:20px;align-items:baseline;justify-content:space-between}
+#workspace .section-heading span{font-family:var(--display);font-size:var(--t-micro)}
+#workspace .section-heading h2,#workspace .workspace-columns h2,#workspace .balance h2{font-size:var(--t-h3);letter-spacing:var(--tr-h3);max-width:none;margin:0 0 20px}
+#workspace .workspace-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--rule);background:var(--sheet)}
+#workspace .metric{padding:20px;min-width:0}
+#workspace .metric+.metric{border-left:1px solid var(--rule)}
+#workspace .metric strong{display:block;font-family:var(--display);font-size:var(--t-h2);letter-spacing:var(--tr-h2);overflow-wrap:anywhere;font-weight:500;line-height:1.25}
+#workspace .metric span{font-family:var(--display);font-size:var(--t-label);line-height:1.8}
+#workspace .workspace-caption{font-size:var(--t-small);line-height:1.58;color:var(--prose);margin:14px 0;max-width:66ch}
+#workspace .workspace-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;border-top:1px dashed var(--rule);margin-top:32px;padding-top:36px}
+#workspace .brief-panel,#workspace .create-panel{min-width:0}
+#workspace label{display:block;font-family:var(--display);font-size:var(--t-label);margin:18px 0 8px}
+#workspace input,#workspace textarea,#workspace select{width:100%;padding:12px}
+#workspace textarea{line-height:1.5;resize:vertical}
+#workspace select{margin-bottom:15px}
+#workspace .form-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+#workspace .create-panel>p{font-size:var(--t-small);color:var(--prose)}
+#workspace .create-panel form>.actions{margin-top:24px}
+#workspace .brief-panel dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;font-family:var(--display);font-size:var(--t-label)}
+#workspace .brief-panel dt{color:var(--prose)}
+#workspace .brief-panel dd{margin:0;overflow-wrap:anywhere}
+#workspace .brief-panel h3{margin-top:24px}
+#workspace .body-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:var(--t-prose);line-height:1.58}
+#workspace details{margin-top:28px}
+#workspace summary{cursor:pointer;font-family:var(--display);font-size:var(--t-label)}
+#workspace pre{font-family:var(--hex);font-size:var(--t-micro);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sheet);padding:16px;max-height:450px;overflow:auto}
+#workspace #delivery-form{margin-top:24px}
+#workspace #delivery-form button{margin:6px 6px 0 0}
+#workspace .balance,#workspace div:has(>#history){border-top:1px dashed var(--rule);margin-top:44px;padding-top:32px}
+#workspace .journal-entry{border-bottom:1px solid var(--rule);padding:20px 0}
+#workspace .journal-entry h3{margin:0 0 10px}
+#workspace .journal-entry p{font-size:var(--t-small);margin:7px 0;overflow-wrap:anywhere}
+#workspace .journal-entry a{overflow-wrap:anywhere;font-family:var(--hex);font-size:var(--t-micro)}
+#workspace .journal-entry details{margin-top:12px}
+#workspace .demo-evidence{border-top:1px dashed var(--rule);padding-top:28px;margin-top:36px}
+#workspace .demo-summary{margin-bottom:0}
+@media(max-width:740px){
+ #workspace .workspace-columns{grid-template-columns:minmax(0,1fr);gap:40px}
+ #workspace .create-panel{border-top:1px dashed var(--rule);padding-top:32px}
+ #workspace .workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #workspace .metric{padding:15px}
+ #workspace .metric:nth-child(3){border-left:0}
+ #workspace .metric:nth-child(n+3){border-top:1px solid var(--rule)}
+ #workspace .walletbar{align-items:flex-start;flex-direction:column}
+ #workspace .section-heading{align-items:flex-start;flex-wrap:wrap;gap:5px}
+ #workspace .section-heading h2{margin-bottom:12px}
+ #workspace .brief-panel dl{grid-template-columns:105px minmax(0,1fr)}
+ #workspace .form-pair{gap:10px}
+}

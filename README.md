@@ -27,7 +27,7 @@ witness. Retainer holds the money until the verdict.
 
 ## Live app and operational demo
 
-[Open the Bradbury app](https://zhekinmaksim.github.io/retainer/app.html) to read
+[Open the Bradbury app](https://retainer-ashen.vercel.app/#workspace) to read
 the deployed contract without a wallet, or connect two funded test accounts
 to open, accept, deliver, judge and withdraw. The transaction journal saves
 broadcast hashes, resumes on reload and distinguishes provisional consensus
@@ -213,8 +213,9 @@ npm run build
 make serve
 ```
 
-Open `http://localhost:8080/app.html`. The app uses the pinned GenLayer JS SDK
+Open `http://localhost:8080/#workspace`. The app uses the pinned GenLayer JS SDK
 and an injected EIP-1193 wallet. Signing keys stay in the wallet; there is no
-server wallet. `npm run build` bundles the browser entrypoint; GitHub Pages
-rebuilds and publishes `web/` on pushes to main. `make check` runs offline
+server wallet. `npm run build` bundles the browser entrypoint; Vercel
+rebuilds and publishes `web/` on pushes to main. The older GitHub Pages
+URL remains compatible; `app.html` redirects to the integrated workspace. `make check` runs offline
 contract, agent and receipt-pipeline checks.
